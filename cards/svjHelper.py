@@ -89,8 +89,6 @@ class quarklist(object):
 
 class svjHelper(object):
     def __init__(self):
-        with open(os.path.join(os.path.expandvars('$CMSSW_BASE'),'src/SVJ/Production/test/dict_xsec_Zprime.txt'),'r') as xfile:
-            self.xsecs = {int(xline.split('\t')[0]): float(xline.split('\t')[1]) for xline in xfile}
         self.quarks = quarklist()
         self.alphaName = ""
         self.generate = None
@@ -167,7 +165,6 @@ class svjHelper(object):
             self.boostvar = ""
 
         # get more parameters
-        self.xsec = self.getPythiaXsec(self.mMediator)
         self.mMin = self.mMediator-1
         self.mMax = self.mMediator+1
         self.mSqua = self.mDark/2. # dark scalar quark mass (also used for pTminFSR)
@@ -213,15 +210,6 @@ class svjHelper(object):
         if sanitize:
             _outname = _outname.replace("-","_").replace(".","p")
         return _outname
-
-    # allow access to all xsecs
-    def getPythiaXsec(self,mMediator):
-        xsec = 1.0
-        # todo: get t-channel cross sections
-        if self.channel=="t": return xsec
-        # a function of mMediator
-        if mMediator in self.xsecs: xsec = self.xsecs[mMediator]
-        return xsec
 
     def invisibleDecay(self,mesonID,dmID):
         lines = ['{:d}:oneChannel = 1 {:g} 0 {:d} -{:d}'.format(mesonID,self.rinv,dmID,dmID)]
