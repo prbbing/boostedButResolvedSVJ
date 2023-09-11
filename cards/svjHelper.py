@@ -96,6 +96,7 @@ class svjHelper(object):
         self.n_c = 2
         self.n_f = 2
         self.b0 = 11.0/6.0*self.n_c - 2.0/6.0*self.n_f
+        self.allowed_boostvars = ["madpt","madphopt"]
 
     def setAlpha(self,alpha):
         self.alphaName = alpha
@@ -151,12 +152,11 @@ class svjHelper(object):
             if self.yukawa is None: raise ValueError("yukawa value must be provided for madgraph t-channel")
 
         # boosting
-        allowed_boostvars = ["pt","madpt"]
         if boost>0 and boostvar is not None:
-            if boostvar not in allowed_boostvars:
+            if boostvar not in self.allowed_boostvars:
                 raise ValueError("Unknown boost variable {}".format(boostvar))
             # some filters are implemented in madgraph
-            if (boostvar=="madpt") and generate:
+            if (boostvar.startswith("mad")) and generate:
                 raise ValueError("{} boostvar not compatible with Pythia-only generation".format(boostvar))
             self.boostvar = boostvar
             self.boost = boost
@@ -416,11 +416,9 @@ class svjHelper(object):
                 lhaid = "{:g}".format(lhaid),
                 # for boosted
                 madpt = "{:g}".format(self.boost if self.boostvar=="madpt" else 0.),
-                # for t-channel
-                procInclusive = "" if not self.sepproc or self.nMediator is None else "#",
-                procPair = "" if self.sepproc and self.nMediator==2 else "#",
-                procSingle = "" if self.sepproc and self.nMediator==1 else "#",
-                procNonresonant = "" if self.sepproc and self.nMediator==0 else "#",
+                madphopt = "{:g}".format(self.boost if self.boostvar=="madphopt" else 0.),
+                procJet = "" if self.boostvar=="madpt" else "#",
+                procPho = "" if self.boostvar=="madphopt" else "#",
             )
 
         return mg_model_dir, mg_input_dir

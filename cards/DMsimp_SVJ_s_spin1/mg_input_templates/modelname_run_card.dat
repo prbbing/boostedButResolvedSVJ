@@ -192,7 +192,7 @@
   0.0	= ptheavy ! minimum pt for at least one heavy final state
   0.0	= xptj ! minimum pt for at least one jet  
   0.0	= xptb ! minimum pt for at least one b 
-  0.0	= xpta ! minimum pt for at least one photon 
+  $madphopt	= xpta ! minimum pt for at least one photon 
   0.0	= xptl ! minimum pt for at least one charged lepton 
 #*********************************************************************
 # Control the pt's of the jets sorted by pt                          *

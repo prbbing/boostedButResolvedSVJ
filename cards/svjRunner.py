@@ -2,17 +2,20 @@ import os, math, sys, shutil
 from string import Template
 from glob import glob
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
+from svjHelper import svjHelper
 
 if __name__=="__main__":
+    helper = svjHelper()
+
     parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
     parser.add_argument("--mMediator", required=True, type=float, help="mediator mass (GeV)")
     parser.add_argument("--mDark", required=True, type=float, help="dark hadron mass (GeV)")
     parser.add_argument("--rinv", required=True, type=float, help="invisible fraction")
+    parser.add_argument("--boost", default=0.0, type=float, help="boost cut")
+    parser.add_argument("--boostvar", default=None, type=str, choices=helper.allowed_boostvars, help="boost variable")
     args = parser.parse_args()
 
-    from svjHelper import svjHelper
-    helper = svjHelper()
-    helper.setModel("s", args.mMediator, args.mDark, args.rinv, "peak", generate=False)
+    helper.setModel("s", args.mMediator, args.mDark, args.rinv, "peak", generate=False, boost=args.boost, boostvar=args.boostvar)
     oname = helper.getOutName(outpre="SVJ")
 
     mg_name = "DMsimp_SVJ_s_spin1"
