@@ -59,6 +59,13 @@ jjdR = r.TH1D("jjdR","jjdR",50,0,5),
 JJdR = r.TH1D("JJdR","JJdR",50,0,5),
 XdXddR = r.TH1D("XdXddR","XdXddR",50,0,5),
 
+# dijet-met kinematics
+
+mTjj = r.TH1D("mTjj","mTjj",30,0,1500),
+maosjj = r.TH1D("maosjj","maosjj",30,0,1500),
+mTJJ = r.TH1D("mTJJ","mTJJ",30,0,1500),
+maosJJ = r.TH1D("maosJJ","maosJJ",30,0,1500),
+
 # MET-X system kinematics
 
 # min MET-j dphi among leading two jets
@@ -79,6 +86,12 @@ thirdJMetDPhi = r.TH1D("thirdJMetDPhi","thirdJMetDPhi",32,0,3.2),
 
 dijetMetDPhi = r.TH1D("dijetMetDPhi","dijetMetDPhi",32,0,3.2),
 diJetMetDPhi = r.TH1D("diJetMetDPhi","diJetMetDPhi",32,0,3.2),
+
+# 2D dphi
+jMetDPhi2D = r.TH2D("jMetDPhi2D", "jMetDPhi2D", 32,0,3.2, 32,0,3.2),
+JMetDPhi2D = r.TH2D("JMetDPhi2D", "JMetDPhi2D", 32,0,3.2, 32,0,3.2),
+jminDPhi_photonPt = r.TH2D("jminDPhi_photonPt","jminDPhi_photonPt", 32,0,3.2, 20,0,1000),
+JminDPhi_photonPt = r.TH2D("JminDPhi_photonPt","JminDPhi_photonPt", 32,0,3.2, 20,0,1000),
 
 # Truth matching
 # Jet index of the Xds

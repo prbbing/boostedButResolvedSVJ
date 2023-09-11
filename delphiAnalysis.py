@@ -3,6 +3,36 @@ import numpy as np
 import math
 from histos import histos
 
+def TransverseMass(px1, py1, m1, px2, py2, m2):
+  E1 = np.sqrt(px1**2+py1**2+m1**2)
+  E2 = np.sqrt(px2**2+py2**2+m2**2)
+  MTsq = (E1+E2)**2-(px1+px2)**2-(py1+py2)**2
+  return np.sqrt(max(MTsq,0.0))
+
+def MAOS(lead_j, sublead_j, met):
+  mT2 = r.asymm_mt2_lester_bisect.get_mT2(
+    lead_j.M(), lead_j.Px(), lead_j.Py(),
+    sublead_j.M(), sublead_j.Px(), sublead_j.Py(),
+    met.Px(), met.Py(), 0.0, 0.0, 0
+  )
+  met1x, met1y = r.asymm_mt2_lester_bisect.ben_findsols(mT2,
+    lead_j.Px(), lead_j.Py(), lead_j.M(), 0.0,
+    sublead_j.Px(), sublead_j.Py(),
+    met.Px(), met.Py(), sublead_j.M(), 0.0
+  )
+  met1t = np.sqrt(met1x**2+met1y**2)
+  met2x = met.Px() - met1x
+  met2y = met.Py() - met1y
+  met2t = np.sqrt(met2x**2+met2y**2)
+  met1z = met1t*lead_j.Pz()/lead_j.Pt()
+  met2z = met2t*sublead_j.Pz()/sublead_j.Pt()
+  v_met1 = r.TLorentzVector()
+  v_met1.SetPxPyPzE(met1x,met1y,met1z,np.sqrt(met1t**2+met1z**2))
+  v_met2 = r.TLorentzVector()
+  v_met2.SetPxPyPzE(met2x,met2y,met2z,np.sqrt(met2t**2+met2z**2))
+  maos_val = (lead_j + sublead_j + v_met1 + v_met2).M()
+  return maos_val
+
 parser = argparse.ArgumentParser()
 parser.add_argument("-i","--input", type=str, required=True, default=None, help="input filename")
 parser.add_argument("-o","--output", type=str, required=True, default=None, help="output filename")
@@ -11,11 +41,13 @@ args = parser.parse_args()
 import ROOT as r
 r.gSystem.Load("/cvmfs/sft.cern.ch/lcg/views/LCG_104/x86_64-centos7-gcc11-opt/lib/libDelphes.so")
 r.gInterpreter.Declare('#include "classes/DelphesClasses.h"')
-r.gInterpreter.Declare('#include "external/ExRootAnalysis/ExRootTreeReader.h"')
+r.gInterpreter.Declare('#include "ExRootAnalysis/ExRootTreeReader.h"')
+r.gInterpreter.Declare('#include "lester_mt2_bisect.h"')
+r.asymm_mt2_lester_bisect.disableCopyrightMessage()
 
-outf = r.TFile(arguments.output,"RECREATE")
+outf = r.TFile(args.output,"RECREATE")
 chain = r.TChain("Delphes")
-chain.Add(arguments.input)
+chain.Add(args.input)
 
 # Create object of class ExRootTreeReader
 treeReader = r.ExRootTreeReader(chain)
@@ -175,9 +207,12 @@ for entry in range(0, numberOfEntries):
 
   # leading di-jet pair kinematics
 
-  histos["mjjMass"].Fill((lead_j + sublead_j).M(), weight)
+  di_j = lead_j + sublead_j
+  di_J = None
+  histos["mjjMass"].Fill(di_j.M(), weight)
   if sublead_J.Pt() and lead_J.Pt():
-    histos["mJJMass"].Fill((lead_J + sublead_J).M(), weight)
+    di_J = lead_J + sublead_J
+    histos["mJJMass"].Fill(di_J.M(), weight)
   histos["mXdXdMass"].Fill((xds[0] + xds[1]).M(), weight)
 
   histos["jjdPhi"].Fill(lead_j.DeltaPhi(sublead_j), weight)
@@ -191,17 +226,31 @@ for entry in range(0, numberOfEntries):
     histos["JJdR"].Fill(lead_J.DeltaR(sublead_J), weight)
   histos["XdXddR"].Fill(xds[0].DeltaR(xds[1]), weight)
 
+  # dijet-MET kinematics
+
+  mTjj = TransverseMass(di_j.Px(),di_j.Py(),di_j.M(),met.Px(),met.Py(),0)
+  histos["mTjj"].Fill(mTjj, weight)
+  maosjj = MAOS(lead_j, sublead_j, met)
+  histos["maosjj"].Fill(maosjj, weight)
+
+  if di_J is not None:
+    mTJJ = TransverseMass(di_J.Px(),di_J.Py(),di_J.M(),met.Px(),met.Py(),0)
+    histos["mTJJ"].Fill(mTJJ, weight)
+    maosJJ = MAOS(lead_J, sublead_J, met)
+    histos["maosJJ"].Fill(maosJJ, weight)
+
   # MET-X system kinematics
 
   # min MET-j dphi among leading two jets
-  histos["jminDPhi"].Fill(min(lead_j.DeltaPhi(met), sublead_j.DeltaPhi(met)), weight)
+  jminDPhi = min(lead_j.DeltaPhi(met), sublead_j.DeltaPhi(met))
+  histos["jminDPhi"].Fill(jminDPhi)
 
   # min MET-J dphi among leading two large-R jets
   if sublead_J.Pt():
-    histos["JminDPhi"].Fill(min(lead_J.DeltaPhi(met), sublead_J.DeltaPhi(met)), weight)
-
+    JminDPhi = min(lead_J.DeltaPhi(met), sublead_J.DeltaPhi(met))
   else:
-    histos["JminDPhi"].Fill(lead_J.DeltaPhi(met), weight)
+    JminDPhi = lead_J.DeltaPhi(met)
+  histos["JminDPhi"].Fill(JminDPhi, weight)
 
   histos["photonMetDPhi"].Fill(photon.DeltaPhi(met), weight)
 
@@ -220,6 +269,14 @@ for entry in range(0, numberOfEntries):
   histos["dijetMetDPhi"].Fill(met.DeltaPhi(lead_j + sublead_j), weight)
   if sublead_J.Pt():
     histos["diJetMetDPhi"].Fill(met.DeltaPhi(lead_J + sublead_J), weight)
+
+  # 2D dphi
+  histos["jMetDPhi2D"].Fill(lead_j.DeltaPhi(met), sublead_j.DeltaPhi(met), weight)
+  if sublead_J.Pt():
+    histos["JMetDPhi2D"].Fill(lead_J.DeltaPhi(met), sublead_J.DeltaPhi(met), weight)
+  histos["jminDPhi_photonPt"].Fill(jminDPhi, photon.Pt(), weight)
+  if sublead_J.Pt():
+    histos["JminDPhi_photonPt"].Fill(JminDPhi, photon.Pt(), weight)
 
 outf.cd()
 for k,v in histos.items():
