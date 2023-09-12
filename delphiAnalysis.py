@@ -1,6 +1,6 @@
 import os,sys,argparse
 import numpy as np
-import math
+from tqdm import tqdm
 from histos import histos
 
 def TransverseMass(px1, py1, m1, px2, py2, m2):
@@ -33,9 +33,10 @@ def MAOS(lead_j, sublead_j, met):
   maos_val = (lead_j + sublead_j + v_met1 + v_met2).M()
   return maos_val
 
-parser = argparse.ArgumentParser()
+parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("-i","--input", type=str, required=True, default=None, help="input filename")
 parser.add_argument("-o","--output", type=str, required=True, default=None, help="output filename")
+parser.add_argument("-n","--nevents", type=int, default=-1, help="restrict number of events (for testing)")
 args = parser.parse_args()
 
 import ROOT as r
@@ -52,6 +53,8 @@ chain.Add(args.input)
 # Create object of class ExRootTreeReader
 treeReader = r.ExRootTreeReader(chain)
 numberOfEntries = treeReader.GetEntries()
+if args.nevents<0: args.nevents = numberOfEntries
+numberOfEntries = min(args.nevents, numberOfEntries)
 branchWeight = treeReader.UseBranch("Weight")
 branchJet = treeReader.UseBranch("Jet")
 branchFatJet = treeReader.UseBranch("FatJet")
@@ -59,7 +62,7 @@ branchPhoton = treeReader.UseBranch("Photon")
 branchMet = treeReader.UseBranch("MissingET")
 branchParticle = treeReader.UseBranch("Particle")
 
-for entry in range(0, numberOfEntries):
+for entry in tqdm(range(0, numberOfEntries)):
 
   treeReader.ReadEntry(entry)
 
