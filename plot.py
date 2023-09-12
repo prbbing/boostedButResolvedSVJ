@@ -49,8 +49,8 @@ for i,input in enumerate(args.inputs):
     iname = input.replace("out_","").replace(".root","")
     ifile = r.TFile.Open(input)
     ikeys = [k.GetName() for k in ifile.GetListOfKeys()]
+    if len(args.qtys)>0: ikeys = args.qtys[:]
     for ikey in ikeys:
-        if len(args.qtys)>0 and ikey not in args.qtys: continue
         ihist = ifile.Get(ikey)
         ihist.SetDirectory(0)
         if args.norm:
