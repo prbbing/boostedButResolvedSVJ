@@ -1,7 +1,8 @@
 import os,sys,argparse
 import numpy as np
-from tqdm import tqdm
 from histos import histos
+from tqdm import tqdm
+from XS import crossSections
 
 def TransverseMass(px1, py1, m1, px2, py2, m2):
   E1 = np.sqrt(px1**2+py1**2+m1**2)
@@ -37,24 +38,37 @@ parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFo
 parser.add_argument("-i","--input", type=str, required=True, default=None, help="input filename")
 parser.add_argument("-o","--output", type=str, required=True, default=None, help="output filename")
 parser.add_argument("-n","--nevents", type=int, default=-1, help="restrict number of events (for testing)")
+parser.add_argument("-c","--cool", action='store_true', help="Someone cool is using a MAC m1. But by default, not everyone is cool.")
+parser.add_argument("-s","--sample", type=str, default="signal", help="input sample type: signal, qcd, qcdcms.")
+
 args = parser.parse_args()
 
 import ROOT as r
-r.gSystem.Load("/cvmfs/sft.cern.ch/lcg/views/LCG_104/x86_64-centos7-gcc11-opt/lib/libDelphes.so")
+
+if args.cool:
+  r.gSystem.Load("/cvmfs/sft.cern.ch/lcg/views/LCG_104/arm64-mac13-clang140-opt/lib/libDelphes.dylib")
+else:
+  r.gSystem.Load("/cvmfs/sft.cern.ch/lcg/views/LCG_104/x86_64-centos7-gcc11-opt/lib/libDelphes.so")
+
 r.gInterpreter.Declare('#include "classes/DelphesClasses.h"')
 r.gInterpreter.Declare('#include "ExRootAnalysis/ExRootTreeReader.h"')
 r.gInterpreter.Declare('#include "lester_mt2_bisect.h"')
 r.asymm_mt2_lester_bisect.disableCopyrightMessage()
+
 
 outf = r.TFile(args.output,"RECREATE")
 chain = r.TChain("Delphes")
 chain.Add(args.input)
 
 # Create object of class ExRootTreeReader
+
 treeReader = r.ExRootTreeReader(chain)
 numberOfEntries = treeReader.GetEntries()
 if args.nevents<0: args.nevents = numberOfEntries
+print("Total Number of events is : " + str(numberOfEntries))
 numberOfEntries = min(args.nevents, numberOfEntries)
+
+branchEvent = treeReader.UseBranch("Event")
 branchWeight = treeReader.UseBranch("Weight")
 branchJet = treeReader.UseBranch("Jet")
 branchFatJet = treeReader.UseBranch("FatJet")
@@ -62,24 +76,39 @@ branchPhoton = treeReader.UseBranch("Photon")
 branchMet = treeReader.UseBranch("MissingET")
 branchParticle = treeReader.UseBranch("Particle")
 
+# Need to obtain the xs for CMS QCD open data
+
+xs = 1
+if args.sample == "qcdcms":
+  datasetName = args.input.split("/")[-1].split(".root")[0]
+  xs = crossSections[datasetName]
+
 for entry in tqdm(range(0, numberOfEntries)):
 
   treeReader.ReadEntry(entry)
 
-  #Get weight
-  weight = branchWeight.At(0).Weight
+  #Get weight. In CMS open data, it is in the Event branch while in vanilla delphes output it is in the Weight branch
+  weight = 1
+  if args.sample == "qcdcms": 
+    weight = branchEvent.At(0).Weight * xs/numberOfEntries
+  else:
+    weight = branchWeight.At(0).Weight
 
-  # Get the dark quarks
+  # Get the dark quarks when it is signal
   xds = []
-  for j in range(0,  branchParticle.GetEntries()):
-    par = branchParticle.At(j)
-    xd = r.TLorentzVector()
-    pid = par.PID
-    if abs(pid) == 4900101 and par.Status == 23:
-      xd.SetPtEtaPhiM(par.PT, par.Eta, par.Phi, par.Mass)
+  if args.sample == "signal":
+    for j in range(0,  branchParticle.GetEntries()):
+      par = branchParticle.At(j)
+      xd = r.TLorentzVector()
+      pid = par.PID
       xds.append(xd)
-  if len(xds) < 2:
-    continue
+      if len(xds) == 2:
+        break
+      if abs(pid) == 4900101 and par.Status == 23:
+        xd.SetPtEtaPhiM(par.PT, par.Eta, par.Phi, par.Mass)
+        xds.append(xd)
+    if len(xds) < 2:
+      continue
 
   #Get the photon
   photon = r.TLorentzVector()
@@ -108,8 +137,9 @@ for entry in tqdm(range(0, numberOfEntries)):
     # Find the matched jet indices for Xds
     jet_vec = r.TLorentzVector()
     jet_vec.SetPtEtaPhiM(jet.PT, jet.Eta, jet.Phi, jet.Mass)
-    if jet_vec.DeltaR(xds[0]) < 0.2 or jet_vec.DeltaR(xds[1]) < 0.2:
-      histos["jet_index"].Fill(j, weight)
+    if args.sample == "signal":
+      if jet_vec.DeltaR(xds[0]) < 0.2 or jet_vec.DeltaR(xds[1]) < 0.2:
+        histos["jet_index"].Fill(j, weight)
 
     # Find the leading jets
     if jet.PT > lead_j.Pt():
@@ -139,8 +169,9 @@ for entry in tqdm(range(0, numberOfEntries)):
     # Find the matched Jet indices for Xds
     Jet_vec = r.TLorentzVector()
     Jet_vec.SetPtEtaPhiM(Jet.PT, Jet.Eta, Jet.Phi, Jet.Mass)
-    if Jet_vec.DeltaR(xds[0]) < 0.4 or Jet_vec.DeltaR(xds[1]) < 0.4:
-      histos["Jet_index"].Fill(j, weight)
+    if args.sample == "signal":
+      if Jet_vec.DeltaR(xds[0]) < 0.4 or Jet_vec.DeltaR(xds[1]) < 0.4:
+        histos["Jet_index"].Fill(j, weight)
 
     # Find the leading Jets
     if Jet.PT > lead_J.Pt():
@@ -213,21 +244,24 @@ for entry in tqdm(range(0, numberOfEntries)):
   di_j = lead_j + sublead_j
   di_J = None
   histos["mjjMass"].Fill(di_j.M(), weight)
-  if sublead_J.Pt() and lead_J.Pt():
+  if sublead_J.Pt() and lead_J.Pt() and sublead_J.M() and lead_J.M():
     di_J = lead_J + sublead_J
     histos["mJJMass"].Fill(di_J.M(), weight)
-  histos["mXdXdMass"].Fill((xds[0] + xds[1]).M(), weight)
+  if args.sample == "signal":
+    histos["mXdXdMass"].Fill((xds[0] + xds[1]).M(), weight)
 
   histos["jjdPhi"].Fill(lead_j.DeltaPhi(sublead_j), weight)
   if sublead_J.Pt() and lead_J.Pt():
     histos["JJdPhi"].Fill(lead_J.DeltaPhi(sublead_J), weight)
-  histos["XdXddPhi"].Fill(xds[0].DeltaPhi(xds[1]), weight)
+  if args.sample == "signal":
+    histos["XdXddPhi"].Fill(xds[0].DeltaPhi(xds[1]), weight)
 
   histos["jjdR"].Fill(lead_j.DeltaR(sublead_j), weight)
   if sublead_J.Pt():
 
     histos["JJdR"].Fill(lead_J.DeltaR(sublead_J), weight)
-  histos["XdXddR"].Fill(xds[0].DeltaR(xds[1]), weight)
+  if args.sample == "signal":
+    histos["XdXddR"].Fill(xds[0].DeltaR(xds[1]), weight)
 
   # dijet-MET kinematics
 
