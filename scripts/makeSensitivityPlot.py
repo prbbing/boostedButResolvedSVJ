@@ -1,0 +1,177 @@
+import os,sys
+from ROOT import *
+from math import *
+
+def formatHist(hist):
+    hist.SetTitle("")
+    hist.SetStats(0)
+    hist.GetXaxis().SetLabelSize(0)    
+    hist.GetXaxis().SetTitleSize(0)    
+    hist.SetAxisRange(200,1000,"x")   
+
+def gPadSetup(logy):
+    if logy == 1:
+        gPad.SetLogy(1)
+    if logy == 2:
+        gPad.SetLogx(1)
+    if logy == 3:
+        gPad.SetLogy(1)
+        gPad.SetLogx(1)
+    gPad.SetTopMargin(0.05)
+    gPad.SetBottomMargin(0.15)
+    gPad.SetLeftMargin(0.15)
+    gPad.SetRightMargin(0.09)
+
+def makeSigHist(sigHist, bkgHist):
+    newHist = sigHist.Clone()
+    newHist.Sumw2()
+    for i in range(1, sigHist.GetNbinsX() + 1):
+        if bkgHist.GetBinContent(i):
+            newHist.SetBinContent(i, sigHist.GetBinContent(i)/sqrt(bkgHist.GetBinContent(i)))
+        else:
+            newHist.SetBinContent(i,newHist.GetBinContent(i-1))
+    return newHist
+
+bkgf = TFile("output_multijet_GammaISR150_yStar0p8_rT0p4.root")
+sigf = TFile("output_Z500_GammaISR150_rinv0p9_yStar0p8_rT0p4.root")
+bkgf_sel = TFile("output_multijet_GammaISR150_yStar0p8_rinv_maos0p4.root")
+sigf_sel = TFile("output_Z500_GammaISR150_rinv0p9_yStar0p8_rinv_maos0p4.root")
+outf = TFile("final_Z500.root", "RECREATE")
+
+bkgHist = bkgf.Get("maosjj").Clone()
+sigHist = sigf.Get("maosjj").Clone()
+bkgHist_sel = bkgf_sel.Get("maosjj").Clone()
+sigHist_sel = sigf_sel.Get("maosjj").Clone()
+bkgHist.Rebin(2)
+bkgHist_sel.Rebin(2)
+sigHist.Rebin(2)
+sigHist_sel.Rebin(2)
+formatHist(bkgHist)
+formatHist(bkgHist_sel)
+formatHist(sigHist)
+formatHist(sigHist_sel)
+
+sOverB = makeSigHist(sigHist, bkgHist)
+sOverB_sel = makeSigHist(sigHist_sel, bkgHist_sel)
+
+sOverB_ratio = sOverB_sel.Clone()
+sOverB_ratio.Divide(sOverB_sel, sOverB, 1, 1, "b")
+
+outf.cd()
+
+canvas = TCanvas("final_Z500","final_Z500",10,10,600,600)
+canvas.SetFillStyle(0)
+canvas.Divide(1,3)
+canvas.cd(1)
+gPadSetup(1)
+gPad.SetPad(0,0.28,1,1)
+gPad.SetMargin(0.15,0.05,0.01,0.07)
+gPad.SetFillStyle(0)
+gPad.Update()
+gPad.Draw()
+canvas.cd(2)
+gPad.SetPad(0,0.2,1,0.4)
+gPad.SetMargin(0.15,0,0.4,0.07)
+gPad.SetFillStyle(0)
+gPad.SetGridy(1)
+gPad.Update()
+gPad.Draw()
+canvas.cd(3)
+gPad.SetPad(0,0,1.0,0.25)
+gPad.SetMargin(0.15,0.05,0.4,0.07)
+gPad.SetFillStyle(0)
+gPad.SetGridy(1)
+gPad.Update()
+gPad.Draw()
+
+canvas.cd(1)
+gPadSetup(1)
+    
+legend_1 = TLegend(0.6, 0.7, 0.9, 0.93)
+legend_1.SetBorderSize(0)
+legend_1.SetTextFont(42)
+legend_1.SetFillColor(0)
+legend_1.SetTextSize(0.03)
+legend_1.SetFillStyle(0)
+ 
+canvas.cd(1)
+bkgHist.SetLineColor(13)
+bkgHist.SetLineWidth(4)
+bkgHist.SetLineStyle(9)
+bkgHist.GetYaxis().SetTitle("Events")
+bkgHist.GetYaxis().SetTitleSize(0.04)
+bkgHist.Draw("histo")
+bkgHist_sel.SetLineColor(13)
+bkgHist_sel.SetLineWidth(4)
+bkgHist_sel.SetLineStyle(1)
+sigHist.SetLineColor(46)
+sigHist.SetLineWidth(4)
+sigHist.SetLineStyle(9)
+sigHist_sel.SetLineColor(46)
+sigHist_sel.SetLineWidth(4)
+sigHist_sel.SetLineStyle(1)
+bkgHist_sel.Draw("histo same")
+sigHist.Draw("histo same")
+sigHist_sel.Draw("histo same")
+bkgHist.GetYaxis().Draw("same")
+
+legend_1.AddEntry(bkgHist,"multijet, |y*| < 0.8","l")
+legend_1.AddEntry(bkgHist_sel,"multijet, |y*| < 0.8 + r_{inv}^{maos} > 0.4","l")
+legend_1.AddEntry(sigHist,"Z' (0.5 TeV) r_{inv} = 0.9, |y*| < 0.8","l")
+legend_1.AddEntry(sigHist_sel,"Z' (0.5 TeV) r_{inv} = 0.9, |y*| < 0.8 + r_{inv}^{maos} > 0.4","l")
+
+legend_1.Draw("same")
+
+canvas.cd(2)
+gPadSetup(0)
+    
+legend = TLegend(0.6, 0.3, 0.9, 0.4)
+legend.SetBorderSize(0)
+legend.SetTextFont(42)
+legend.SetFillColor(0)
+legend.SetTextSize(0.03)
+legend.SetFillStyle(0)
+ 
+canvas.cd(2)
+sOverB.SetLineColor(9)
+sOverB.SetLineWidth(4)
+sOverB.SetLineStyle(9)
+sOverB.GetYaxis().SetTitleSize(0.4)
+sOverB.GetYaxis().SetTitle("S/#sqrt{B}")
+sOverB.Draw("histo")
+sOverB_sel.SetLineColor(9)
+sOverB_sel.SetLineWidth(4)
+sOverB_sel.SetLineStyle(1)
+sOverB_sel.Draw("histo same")
+
+legend.AddEntry(sOverB,"|y*| < 0.8","l")
+legend.AddEntry(sOverB_sel,"|y*| < 0.8 + r_{inv}^{maos} > 0.4","l")
+
+legend.Draw("same")
+canvas.cd(3)
+gPadSetup(0)
+ 
+canvas.cd(3)
+sOverB_ratio.SetLineColor(6)
+sOverB_ratio.SetLineWidth(4)
+sOverB_ratio.SetLineStyle(1)
+sOverB_ratio.GetXaxis().SetTitle("MAOS [GeV]")
+sOverB_ratio.GetYaxis().SetTitle("Ratio")
+sOverB_ratio.GetYaxis().SetTitleSize(0.4)
+sOverB_ratio.GetXaxis().SetTitleSize(0.4)
+sOverB_ratio.Draw("histo")
+sOverB_ratio.GetXaxis().Draw("same")
+sOverB_ratio.GetYaxis().Draw("same")
+canvas.cd(1)
+bkgHist.GetYaxis().Draw("same")
+canvas.cd(2)
+sOverB.GetYaxis().Draw("same")
+canvas.cd(3)
+sOverB_ratio.GetXaxis().Draw("same")
+sOverB_ratio.GetYaxis().Draw("same")
+
+gPad.Update()
+gPad.Modified()
+gPad.RedrawAxis()
+outf.cd()
+canvas.Write()
