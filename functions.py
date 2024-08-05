@@ -31,6 +31,8 @@ def MassRecompose(j1, j2, met):
   py2 = j2.Py()
   pz1 = j1.Pz()
   pz2 = j2.Pz()
+  pt1 = j1.Pt()
+  pt2 = j2.Pt()
   px  = met.Px()
   py  = met.Py()
 
@@ -42,28 +44,36 @@ def MassRecompose(j1, j2, met):
   py1_new = py1
   py2_new = py2
   pz1_new = pz1
-  pz2_new = pz2 
+  pz2_new = pz2
   if x[0]*px1:
     px1_new = px1 + x[0]
     py1_new = py1 + x[2]
-    pz1_new = pz1 + (x[0]*pz1)/px1 
+    pt1_new = np.sqrt(x[0]**2+x[2]**2)
+    pz1_new = pz1 + (pt1_new*pz1)/pt1
   if x[1]*px2:
     px2_new = px2 + x[1]
     py2_new = py2 + x[3]
-    pz2_new = pz2 + (x[1]*pz2)/px2 
-  e1_new = sqrt(px1_new**2 + py1_new**2 + pz1_new**2 + j1.M()**2) 
+    pt2_new = np.sqrt(x[1]**2+x[3]**2)
+    pz2_new = pz2 + (pt2_new*pz2)/pt2
+  e1_new = sqrt(px1_new**2 + py1_new**2 + pz1_new**2 + j1.M()**2)
   e2_new = sqrt(px2_new**2 + py2_new**2 + pz2_new**2 + j2.M()**2)
 
   pz = (x[0]*pz1)/px1 + (x[1]*pz2)/px2
-  met.SetPz(pz) 
+  met.SetPz(pz)
 
   j1_new = r.TLorentzVector()
   j1_new.SetPxPyPzE(px1_new,py1_new,pz1_new,e1_new)
   j2_new = r.TLorentzVector()
   j2_new.SetPxPyPzE(px2_new,py2_new,pz2_new,e2_new)
 
-  return [(j1_new + j2_new).M(), x[0]/(px1 + x[0]), x[1]/(px2+x[1])]
-  #return (j1 + j2 + met).M()
+  rinv_1 = x[0]/(px1 + x[0])
+  rinv_2 = x[1]/(px2 + x[1])
+  return {
+    'mass': (j1_new + j2_new).M(),
+    'rinv1': rinv_1,
+    'rinv2': rinv_2,
+    'rinvAve': (rinv_1 + rinv_2)/2,
+  }
 
 def MAOS(lead_j, sublead_j, met):
   mT2 = r.asymm_mt2_lester_bisect.get_mT2(
@@ -91,4 +101,9 @@ def MAOS(lead_j, sublead_j, met):
   vec_sum_2 = np.sqrt((sublead_j.Px() + met2x)**2 + (sublead_j.Py() + met2y)**2)
   rinv_1 = v_met1.Pt()/vec_sum_1
   rinv_2 = v_met2.Pt()/vec_sum_2
-  return [maos_val, rinv_1, rinv_2]
+  return {
+    'mass': maos_val,
+    'rinv1': rinv_1,
+    'rinv2': rinv_2,
+    'rinvAve': (rinv_1+rinv_2)/2,
+  }
