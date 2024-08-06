@@ -1,6 +1,12 @@
 import numpy as np
 from math import *
 
+import ROOT as r
+r.gInterpreter.Declare('#include "classes/DelphesClasses.h"')
+r.gInterpreter.Declare('#include "ExRootAnalysis/ExRootTreeReader.h"')
+r.gInterpreter.Declare('#include "lester_mt2_bisect.h"')
+r.asymm_mt2_lester_bisect.disableCopyrightMessage()
+
 def deltaPhi(phi1, phi2):
     delta_phi = 0
     if phi1 - phi2 > pi: 
