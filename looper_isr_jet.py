@@ -54,7 +54,13 @@ for mass in masses:
   print(mass)
   for rinv in rinvs:
     print(rinv)
+    outputs = []
     for isr in isrs[mass]:
       print(isr)
-      command = "python3 delphiAnalysis_final_jet.py -i "+sample_dir+"Z"+str(mass)+"_rinv" + str(rinv) + "_JetISR" + isr + ".root -o " + "output_Z"+str(mass)+"_JetISR" + str(isr) + "_rinv" + str(rinv)  +  ".root "+flags+" -x " + str(isrs[mass][isr]) + " -w " + str(weight[mass][isr])+" -y 0.8"
+      outputs.append("output_Z"+str(mass)+"_JetISR" + str(isr) + "_rinv" + str(rinv)  +  ".root")
+      command = "python3 delphiAnalysis_final_jet.py -i "+sample_dir+"Z"+str(mass)+"_rinv" + str(rinv) + "_JetISR" + isr + ".root -o " + outputs[-1] +" "+flags+" -x " + str(isrs[mass][isr]) + " -w " + str(weight[mass][isr])+" -y 0.8"
       os.system(command)
+    # hadd
+    final_output = "output_Z"+str(mass)+"_JetISR500_rinv" + str(rinv)  +  ".root"
+    hadd_command = "hadd -f "+final_output+" "+" ".join(outputs)+" && rm "+" ".join(outputs)
+    os.system(hadd_command)
