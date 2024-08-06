@@ -117,6 +117,7 @@ rinv1_rinv2_maos = r.TH2D("rinv1_rinv2_maos","rinv1_rinv2_maos", 500,-5,5, 500,-
 rinv_ave_maosjj = r.TH2D("rinv_ave_maosjj","rinv_ave_maosjj", 500,-5,5, 80,0,4000),
 rinv_ave_maos_maosjj = r.TH2D("rinv_ave_maos_maosjj","rinv_ave_maos_maosjj", 500,-5,5, 40,0,2000),
 rinv_ave_mTjj = r.TH2D("rinv_ave_mTjj","rinv_ave_mTjj", 500,-5,5, 40,0,2000),
+maosjj_mjjRecomp = r.TH2D("maosjj_mjjRecomp","maosjj_mjjRecomp",40,0,2000,40,0,2000),
 
 # Truth matching
 # Jet index of the Xds

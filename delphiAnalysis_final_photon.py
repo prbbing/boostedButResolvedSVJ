@@ -130,6 +130,8 @@ for entry in tqdm(range(0, numberOfEntries)):
         continue
 
     histos["maosjj"].Fill(maosjj['mass'], weight)
+    histos["mjjRecomp"].Fill(mjjRecompose['mass'], weight)
+    histos["maosjj_mjjRecomp"].Fill(maosjj['mass'], mjjRecompose['mass'], weight)
     histos["metMET"].Fill(met.Pt(), weight)
     histos["metPhi"].Fill(met.Phi(), weight)
     histos["mTjj"].Fill(mTjj, weight)
