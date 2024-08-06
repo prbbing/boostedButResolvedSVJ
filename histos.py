@@ -96,9 +96,6 @@ thirdJMetDPhi = r.TH1D("thirdJMetDPhi","thirdJMetDPhi",32,0,3.2),
 dijetMetDPhi = r.TH1D("dijetMetDPhi","dijetMetDPhi",32,0,3.2),
 diJetMetDPhi = r.TH1D("diJetMetDPhi","diJetMetDPhi",32,0,3.2),
 
-rinv_ave = r.TH1D("rinv_ave","rinv_ave", 500,-5,5),
-rinv_ave_maos = r.TH1D("rinv_ave_maos","rinv_ave_maos", 500,-5,5),
-
 # 2D dphi
 jMetDPhi2D = r.TH2D("jMetDPhi2D", "jMetDPhi2D", 32,0,3.2, 32,0,3.2),
 JMetDPhi2D = r.TH2D("JMetDPhi2D", "JMetDPhi2D", 32,0,3.2, 32,0,3.2),
@@ -112,11 +109,6 @@ genmetEta_photonEta = r.TH2D("genmetEta_photonEta","genmetEta_photonEta", 25,-5,
 genmetEta_dijetEta = r.TH2D("genmetEta_dijetEta","genmetEta_dijetEta", 25,-5,5, 25,-5,5),
 genmetEta_metaugEta = r.TH2D("genmetEta_metaugEta","genmetEta_metaugEta", 25,-5,5, 25,-5,5),
 genmetPhi_photonPhi = r.TH2D("genmetPhi_photonPhi","genmetPhi_photonPhi", 64,-3.2,3.2, 64,-3.2,3.2),
-rinv1_rinv2 = r.TH2D("rinv1_rinv2","rinv1_rinv2", 500,-5,5, 500,-5,5),
-rinv1_rinv2_maos = r.TH2D("rinv1_rinv2_maos","rinv1_rinv2_maos", 500,-5,5, 500,-5,5),
-rinv_ave_maosjj = r.TH2D("rinv_ave_maosjj","rinv_ave_maosjj", 500,-5,5, 80,0,4000),
-rinv_ave_maos_maosjj = r.TH2D("rinv_ave_maos_maosjj","rinv_ave_maos_maosjj", 500,-5,5, 40,0,2000),
-rinv_ave_mTjj = r.TH2D("rinv_ave_mTjj","rinv_ave_mTjj", 500,-5,5, 40,0,2000),
 maosjj_mjjRecomp = r.TH2D("maosjj_mjjRecomp","maosjj_mjjRecomp",40,0,2000,40,0,2000),
 
 # Truth matching
@@ -128,3 +120,17 @@ Jet_index = r.TH1D("Jet_index","Jet_index",10,0,10),
 closestPairToMet = r.TH1D("closestPairToMet","closestPairToMet",3,0,3), 
 
 )
+
+def rinv_histos(rinvs,suff):
+    if len(suff)>0 and suff[0]!='_':
+        suff = '_'+suff
+    histos = {}
+    for rinv in rinvs:
+        histos.update({
+            rinv+'_ave'+suff: r.TH1D(rinv+'_ave'+suff,rinv+'_ave'+suff, 500,-5,5),
+            rinv+'1_'+rinv+'2'+suff: r.TH2D(rinv+'1_'+rinv+'2'+suff, rinv+'1_'+rinv+'2'+suff, 500,-5,5, 500,-5,5),
+            rinv+'_ave'+suff+'_maosjj': r.TH2D(rinv+'_ave'+suff+'_maosjj', rinv+'_ave'+suff+'_maosjj', 500,-5,5, 40,0,2000),
+            rinv+'_ave'+suff+'_mjjRecomp': r.TH2D(rinv+'_ave'+suff+'_mjjRecomp', rinv+'_ave'+suff+'_mjjRecomp', 500,-5,5, 40,0,2000),
+            rinv+'_ave'+suff+'_mTjj': r.TH2D(rinv+'_ave'+suff+'_mTjj', rinv+'_ave'+suff+'_mTjj', 500,-5,5, 40,0,2000),
+        })
+    return histos

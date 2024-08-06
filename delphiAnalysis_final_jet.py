@@ -9,11 +9,18 @@ parser.add_argument("-c","--cool", action='store_true', help="Someone cool is us
 parser.add_argument("-w","--lumiWeight", type=float, default=1, help="luminosity weight")
 parser.add_argument("-x","--xs", type=float, default=0, help="Production cross section")
 parser.add_argument("-p","--presel", action='store_true', help="preselection: omit rinv/mass cuts")
+parser.add_argument("-r","--rinv", type=str, default="rinv_x", help="type of rinv to use for selection")
 
 args = parser.parse_args()
 
+if args.rinv.endswith('_maos'):
+    args.rinv = args.rinv[:5]
+    args.suff = '_maos'
+else:
+    args.suff = ''
+
 import ROOT as r
-from histos import histos
+from histos import *
 from functions import *
 
 if args.cool:
@@ -63,6 +70,7 @@ branchGenMet = treeReader.UseBranch("GenMissingET")
 
 sum = 0
 sum_sel = 0
+added_rinv_histos = False
 
 for entry in tqdm(range(0, numberOfEntries)):
 
@@ -169,15 +177,24 @@ for entry in tqdm(range(0, numberOfEntries)):
     mTjj = TransverseMass(di_svj.Px(),di_svj.Py(),di_svj.M(),met.Px(),met.Py(),0)
     maosjj = MAOS(svj1, svj2, met)
     mjjRecompose = MassRecompose(svj1, svj2, met)
-   
+
+    rinv_keys = [k for k in mjjRecompose if 'rinv' in k]
+    rinv_keys_maos = [k for k in maosjj if 'rinv' in k]
+    mjj_rk_suff = [(mjjRecompose,rinv_keys,''), (maosjj,rinv_keys_maos,'_maos')]
+    if not added_rinv_histos:
+        for _,rk,suff in mjj_rk_suff:
+            histos.update(rinv_histos(rk,suff))
+        added_rinv_histos = True
+
     if not args.presel:
-      # Apply rinv_ave cut  
-      if mjjRecompose['rinvAve'] < 0.4:
+      # Apply rinv_ave cut
+      rinv_ave =  maosjj[args.rinv][2] if args.suff=='maos' else mjjRecompose[args.rinv][2]
+      if rinv_ave < 0.4:
         continue
       if maosjj['mass'] < 400:
         sum_sel = sum_sel + weight
         continue
-    
+
     histos["maosjj"].Fill(maosjj['mass'], weight)
     histos["mjjRecomp"].Fill(mjjRecompose['mass'], weight)
     histos["maosjj_mjjRecomp"].Fill(maosjj['mass'], mjjRecompose['mass'], weight)
@@ -185,15 +202,16 @@ for entry in tqdm(range(0, numberOfEntries)):
     histos["metPhi"].Fill(met.Phi(), weight)
     histos["mTjj"].Fill(mTjj, weight)
     histos["rT"].Fill(met.Pt()/mTjj, weight)
-    histos["rinv1_rinv2"].Fill(mjjRecompose['rinv1'], mjjRecompose['rinv2'], weight)
-    histos["rinv1_rinv2_maos"].Fill(maosjj['rinv1'], maosjj['rinv2'], weight)
-    histos["rinv_ave"].Fill(mjjRecompose['rinvAve'], weight)
-    histos["rinv_ave_maos"].Fill(maosjj['rinvAve'], weight)
-    histos["rinv_ave_maosjj"].Fill(mjjRecompose['rinvAve'], maosjj['mass'], weight)
-    histos["rinv_ave_maos_maosjj"].Fill(maosjj['rinvAve'], maosjj['mass'], weight)
-    histos["rinv_ave_mTjj"].Fill(mjjRecompose['rinvAve'], mTjj, weight)
     histos["jjdPhi"].Fill(min_dphi, weight)
-    
+
+    for mjj,rk,suff in mjj_rk_suff:
+        for rinv in rk:
+            histos[rinv+'_ave'+suff].Fill(mjj[rinv][2], weight)
+            histos[rinv+'1_'+rinv+'2'+suff].Fill(mjj[rinv][0], mjj[rinv][1], weight)
+            histos[rinv+'_ave'+suff+'_maosjj'].Fill(mjj[rinv][2], maosjj['mass'], weight)
+            histos[rinv+'_ave'+suff+'_mjjRecomp'].Fill(mjj[rinv][2], mjjRecompose['mass'], weight)
+            histos[rinv+'_ave'+suff+'_mTjj'].Fill(mjj[rinv][2], mTjj, weight)
+
     histos["leadjPt"].Fill(lead_j.Pt(), weight)
     histos["leadjEta"].Fill(lead_j.Eta(), weight)
     histos["leadjPhi"].Fill(lead_j.Phi(), weight)
