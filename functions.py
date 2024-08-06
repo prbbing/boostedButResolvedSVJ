@@ -24,7 +24,6 @@ def TransverseMass(px1, py1, m1, px2, py2, m2):
   return np.sqrt(max(MTsq,0.0))
 
 def MassRecompose(j1, j2, met):
-
   px1 = j1.Px()
   px2 = j2.Px()
   py1 = j1.Py()

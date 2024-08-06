@@ -1,7 +1,5 @@
 import os,sys,argparse
-from histos import histos
 from tqdm import tqdm
-from functions import *
 
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("-i","--input", type=str, required=True, default=None, help="input filename")
@@ -15,6 +13,8 @@ parser.add_argument("-p","--presel", action='store_true', help="preselection: om
 args = parser.parse_args()
 
 import ROOT as r
+from histos import histos
+from functions import *
 
 if args.cool:
   r.gSystem.Load("/cvmfs/sft.cern.ch/lcg/views/LCG_104/arm64-mac13-clang140-opt/lib/libDelphes.dylib")
