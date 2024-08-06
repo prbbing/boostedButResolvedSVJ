@@ -22,6 +22,6 @@ for rinv in rinvs:
     print(rinv)
     for isr in isrs:
         print(isr)
-        command = "python3 delphiAnalysis_real_photon.py -i "+sample_dir+"/Z500_rinv" + str(rinv) + "_ISR" + isr + ".root -o " + "output_Z500_GammaISR" + str(isr) + "_rinv" + str(rinv)  +  ".root "+flags+" -x " + str(isrs[isr]) + " -w " + str(weight[isr])+" -y 0.8"
+        command = "python3 delphiAnalysis_final_photon.py -i "+sample_dir+"/Z500_rinv" + str(rinv) + "_ISR" + isr + ".root -o " + "output_Z500_GammaISR" + str(isr) + "_rinv" + str(rinv)  +  ".root "+flags+" -x " + str(isrs[isr]) + " -w " + str(weight[isr])+" -y 0.8"
         os.system(command)
 
