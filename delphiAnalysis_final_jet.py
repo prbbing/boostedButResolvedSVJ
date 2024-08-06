@@ -192,8 +192,8 @@ for entry in tqdm(range(0, numberOfEntries)):
       if rinv_ave < 0.4:
         continue
       if maosjj['mass'] < 400:
-        sum_sel = sum_sel + weight
         continue
+    sum_sel = sum_sel + weight
 
     histos["maosjj"].Fill(maosjj['mass'], weight)
     histos["mjjRecomp"].Fill(mjjRecompose['mass'], weight)

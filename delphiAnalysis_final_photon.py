@@ -102,9 +102,6 @@ for entry in tqdm(range(0, numberOfEntries)):
   #Leading jets kinematics
   
   if photon.Pt() > 150:
-    
-    sum_sel = sum_sel + weight
-   
     if lead_j.Pt() < 25 or sublead_j.Pt() < 25:
       continue
     if abs(lead_j.DeltaPhi(sublead_j)) < 0.8:
@@ -140,9 +137,9 @@ for entry in tqdm(range(0, numberOfEntries)):
       else: rinv_ave =  maosjj[args.rinv][2] if args.suff=='maos' else mjjRecompose[args.rinv][2]
       if rinv_ave < 0.4:
         continue
-        sum_sel = sum_sel + weight
       if maosjj['mass'] < 200:
         continue
+    sum_sel = sum_sel + weight
 
     histos["maosjj"].Fill(maosjj['mass'], weight)
     histos["mjjRecomp"].Fill(mjjRecompose['mass'], weight)
