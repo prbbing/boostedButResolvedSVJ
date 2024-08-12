@@ -1,0 +1,55 @@
+outputPath = "stack_plot_run3.root"
+
+taskSetup = {
+  "Xmax"   : 17.5, 
+  "Xmin"   : -9, 
+  "Ymin"   : 1,
+  "Ymax"   : 10E4,
+  "nameX"  : "GN1 Discriminant", 
+  "nameY"  : "Number of Jets",
+  "name"   : "dileptonGN1", 
+  "doLogy" : 1,
+  "rebinFactor" : 1,   
+  "doFraction"  : 0,
+  "doRatio" : 1,
+  "masterLabel" : "Dilepton t #bar{t} Events",
+  "lumi" : 11925.1, #58791.6 + 44630.6 + 33402.2 + 3244.54, #11925.1,
+  "cme"  : 13.6,
+  "relErrMax" : 10,
+  "scaleToData" : 1,
+  "sort" : 1,
+  "ratioYLabel" : "Data/MC",
+  "ratioYmin" : 0,
+  "ratioYmax" : 2.5,
+}
+stackSources = {
+  "1" : { 
+    "filePath"    :   "/afs/cern.ch/user/j/jabarr/plots-CERN-seminar-GN1/inputs/dilepton_run3.root",
+    "histPath"    :   ["MC/GN1_mc_bb",
+                        "MC/GN1_mc_bc",
+                        "MC/GN1_mc_bl"],
+    "color"       :   4,
+    "legendLabel" :   "bottom jets",
+  }, 
+  "2" : { 
+    "filePath"    :   "/afs/cern.ch/user/j/jabarr/plots-CERN-seminar-GN1/inputs/dilepton_run3.root",
+    "histPath"    :   ["MC/GN1_mc_cb",
+                        "MC/GN1_mc_cc",
+                        "MC/GN1_mc_cl"],
+    "color"       :   5,
+    "legendLabel" :   "charm jets",
+  }, 
+  "3" : { 
+    "filePath"    :   "/afs/cern.ch/user/j/jabarr/plots-CERN-seminar-GN1/inputs/dilepton_run3.root",
+    "histPath"    :   ["MC/GN1_mc_lb",
+                        "MC/GN1_mc_ll",
+                        "MC/GN1_mc_lc",],
+    "color"       :   2,
+    "legendLabel" :   "light jets",
+  }, 
+  "data" : {
+    "filePath"    :   "/afs/cern.ch/user/j/jabarr/plots-CERN-seminar-GN1/inputs/dilepton_run3.root",
+    "histPath"    :   "Data/GN1_data",
+    "legendLabel" :   "Data 2022" #"data 2022",
+  }, 
+} 
