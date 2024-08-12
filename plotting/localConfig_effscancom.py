@@ -1,0 +1,51 @@
+outputPath = "sig_vs_eff_compare_Z500.root"
+
+taskSetup = {
+  "Xmax"   : 1, 
+  "Xmin"   : 0, 
+  "Ymin"   : 0,
+  "Ymax"   : 100,
+  "nameX"  : "Efficiency",
+  "nameY"  : "S/#sqrt{B}",
+  "name"   : "sig_vs_eff_Z500", 
+  "doLogy" : 0,
+  "rebinFactor" : 1,   
+  "doFraction"  : 0,
+  "doRatio" : 0,
+  "masterLabel" : "Z' (0.5 TeV) r_{inv} = 0.9, ISR p_{T}^{#gamma} > 150 GeV",
+  "lumi" : -1,
+  "cme"  : 13,
+  "relErrMax" : 99999,
+  "scaleToData" : 0,
+  "sort" : 1,
+  "ratioYLabel" : "Ratio",
+  "ratioYmin" : 0,
+  "ratioYmax" : 2.0,
+  "normalized" : 0,
+}
+compareSources = {
+  "1" : { 
+    "filePath"    :   "/Users/adminbingxuanliu/Work/boostedButResolvedSVJ/realSel/sOverB_effScan_Z500_GammaISR150_rT.root",
+    "histPath"    :   ["rinv0p9_Z500_ISR150_significance"],
+    "color"       :   1,
+    "style"       :   21,
+    "drawOption"  :   "histo",
+    "legendLabel" :   "r_{T} selection",
+  },
+  "2" : { 
+    "filePath"    :   "/Users/adminbingxuanliu/Work/boostedButResolvedSVJ/realSel/sOverB_effScan_Z500_GammaISR150_rinv.root",
+    "histPath"    :   ["rinv0p9_Z500_ISR150_significance"],
+    "color"       :   9,
+    "style"       :   21,
+    "drawOption"  :   "histo",
+    "legendLabel" :   "#bar{r_{inv}} selection",
+  },
+  "3" : { 
+    "filePath"    :   "/Users/adminbingxuanliu/Work/boostedButResolvedSVJ/realSel/sOverB_effScan_Z500_GammaISR150_rinv_maos.root",
+    "histPath"    :   ["rinv0p9_Z500_ISR150_significance"],
+    "color"       :   46,
+    "style"       :   21,
+    "drawOption"  :   "histo",
+    "legendLabel" :   "#bar{r_{inv}^{MAOS}} selection",
+  },
+} 
