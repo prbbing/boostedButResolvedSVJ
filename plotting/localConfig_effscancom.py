@@ -1,15 +1,16 @@
 import os
 
-outputPath = "sig_vs_eff_compare_Z500.root"
+name = "sig_vs_eff_Z500_GammaISR150_rinv0p9"
+outputPath = name+".root"
 
 taskSetup = {
   "Xmax"   : 1,
   "Xmin"   : 0,
   "Ymin"   : 0,
-  "Ymax"   : 20,
+  "Ymax"   : 30,
   "nameX"  : "Efficiency",
   "nameY"  : "S/#sqrt{B}",
-  "name"   : "sig_vs_eff_Z500",
+  "name"   : name,
   "doLogy" : 0,
   "rebinFactor" : 1,
   "doFraction"  : 0,
@@ -46,14 +47,30 @@ compareSources = {
     "color"       :   9,
     "style"       :   21,
     "drawOption"  :   "histo",
-    "legendLabel" :   "#bar{r}_{inv} selection",
+    "legendLabel" :   "#bar{r}_{inv}^{(xy)} selection",
   },
   "3" : {
+    "filePath"    :   dir+"/sOverB_Z500_GammaISR150_rinv.root",
+    "histPath"    :   ["signif_eff_rinv_t_ave_Z500_GammaISR150_rinv0p9"],
+    "color"       :   8,
+    "style"       :   21,
+    "drawOption"  :   "histo",
+    "legendLabel" :   "#bar{r}_{inv}^{(T)} selection",
+  },
+  "4" : {
     "filePath"    :   dir+"/sOverB_Z500_GammaISR150_rinv.root",
     "histPath"    :   ["signif_eff_rinv_xy_ave_maos_Z500_GammaISR150_rinv0p9"],
     "color"       :   46,
     "style"       :   21,
     "drawOption"  :   "histo",
-    "legendLabel" :   "#bar{r}_{inv}^{MAOS} selection",
+    "legendLabel" :   "#bar{r}_{inv}^{MAOS (xy)} selection",
+  },
+  "5" : {
+    "filePath"    :   dir+"/sOverB_Z500_GammaISR150_rinv.root",
+    "histPath"    :   ["signif_eff_rinv_t_ave_maos_Z500_GammaISR150_rinv0p9"],
+    "color"       :   42,
+    "style"       :   21,
+    "drawOption"  :   "histo",
+    "legendLabel" :   "#bar{r}_{inv}^{MAOS (T)} selection",
   },
 }
