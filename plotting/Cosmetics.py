@@ -23,7 +23,9 @@ def AtlasLabel(x,y,shift,text="",color=1,size=0.06):
 def formatLumi(inputLumi, inputCME):
   lumi=inputLumi
   Lumi=" %.1f fb^{-1}" % (lumi/1000.)
-  CMELUMI="#sqrt{s} = " + str(inputCME) + " TeV, "+ Lumi
+  CMELUMI="#sqrt{s} = " + str(inputCME) + " TeV"
+  if inputLumi>0:
+    CMELUMI += ", "+ Lumi
   return CMELUMI
 
 def myText(x,y,color=1,size=0.04,text=""): 
@@ -37,12 +39,8 @@ def myText(x,y,color=1,size=0.04,text=""):
 def drawAtlasLabel(label, inputLumi, inputCME, shift = 0.0, doRatio = 0):
   CMELUMI = formatLumi(inputLumi, inputCME)
   # Lumi label 
-  #myText(0.59,0.89,1,0.04,CMELUMI)
-  # Atlas label
-  AtlasLabel(0.19,0.89, shift) #"Internal"
-  # Plot specific texts (beneath the Atlas label)
-  myText(0.19, 0.83, 1, 0.04, CMELUMI)
-  myText(0.19,0.77,1,0.04,label)
+  myText(0.19, 0.89, 1, 0.04, CMELUMI)
+  myText(0.19,0.83,1,0.04,label)
 
 def drawLabel(h,nameX,nameY):
   ax=h.GetXaxis()

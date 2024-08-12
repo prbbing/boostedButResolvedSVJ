@@ -6,7 +6,7 @@ taskSetup = {
   "Xmax"   : 1,
   "Xmin"   : 0,
   "Ymin"   : 0,
-  "Ymax"   : 15,
+  "Ymax"   : 20,
   "nameX"  : "Efficiency",
   "nameY"  : "S/#sqrt{B}",
   "name"   : "sig_vs_eff_Z500",

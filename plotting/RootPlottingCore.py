@@ -538,5 +538,5 @@ def drawComparisonPlot(taskSetup, compareSources, outputFile):
   gPad.Modified()
   gPad.RedrawAxis()
   outputFile.cd()
-  canvas.Print("canvas_"+taskSetup["name"] + "_" + outputFile.GetName().split(".")[0] + ".eps");
+  canvas.Print("canvas_"+taskSetup["name"] + ".pdf");
   canvas.Write()
