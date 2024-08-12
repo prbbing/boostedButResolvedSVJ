@@ -453,6 +453,12 @@ def drawComparisonPlot(taskSetup, compareSources, outputFile):
   legend.SetFillStyle(0)
  
   canvas.cd(1)
+  hbase = TH1D("hbase","",1,Xmin,Xmax)
+  hbase.GetYaxis().SetRangeUser(Ymin,Ymax)
+  hbase.Draw("hist")
+  if normalized:
+    nameY = "Arbitrary Units"
+  drawLabel(hbase,nameX,nameY)
   hists = []
   for element in range(0,len(compareSources)):
     compareSource = str(element + 1)
@@ -474,7 +480,6 @@ def drawComparisonPlot(taskSetup, compareSources, outputFile):
     if normalized:
       histTmp.Sumw2()
       histTmp.Scale(1/histTmp.Integral()) 
-      nameY = "Unit. Area"
     histTmp.SetDirectory(0)
     
     oneDHistSetting(histTmp)
@@ -498,11 +503,7 @@ def drawComparisonPlot(taskSetup, compareSources, outputFile):
       histTmp.SetFillColor(compareSources[compareSource]["color"])
     legend.AddEntry(histTmp,compareSources[compareSource]["legendLabel"],legendDrawOption)
     hists.append(histTmp)
-    if len(hists) == 1:
-      histTmp.Draw(drawOption)
-    else:
-      histTmp.Draw("same " + drawOption)
-      drawLabel(hists[0],nameX,nameY)
+    histTmp.Draw("same " + drawOption)
     inputFile.Close()
   legend.Draw("same")
   drawAtlasLabel(masterLabel, lumi,cme, doRatio)
