@@ -6,30 +6,48 @@ massList = ["Z1000_JetISR500","Z500_GammaISR150"]
 signalList = ["rinv0p9", "rinv0p5", "rinv0p1"]
 rinvList = ["rT","rinv_x_ave","rinv_y_ave","rinv_xy_ave","rinv_t_ave"]
 rinvList = rinvList + [rinv+"_maos" for rinv in rinvList if rinv.startswith("rinv")]
+# for mass window
+mvar = "mTjj"
 # for sOverB vs eff
 nbins = 20
 
+def getHist(file,hname,proc,mrange=None,mvar=None):
+    cname = proc
+    if mrange is not None:
+        cname += "_"+mvar
+    hist = file.Get(hname).Clone(cname)
+    if mrange is not None:
+        b1 = hist.GetYaxis().FindBin(mrange[0])
+        b2 = hist.GetYaxis().FindBin(mrange[1])
+        hist = hist.ProjectionX(proc, b1, b2)
+    if not hname.startswith("rT"):
+        hist.Rebin(2)
+    return hist
+
 for mass in massList:
     print(mass)
+    mzprime = float(mass.split('_')[0][1:])
+    mmin = 1/2*mzprime
+    mmax = 3/2*mzprime
     outf = TFile("sOverB_"+mass+"_rinv.root", "RECREATE")
     bkgFile = TFile("output_multijet_"+mass.split('_')[1]+".root")
     for signal in signalList:
         print(signal)
-        signalFile = TFile("output_"+ mass + "_" + signal + ".root")
+        sigFile = TFile("output_"+ mass + "_" + signal + ".root")
         for rinv in rinvList:
             suff = "_"+rinv+"_"+mass+"_"+signal
-            bkgHist = bkgFile.Get(rinv).Clone("bkg"+suff)
-            if rinv!="rT": bkgHist.Rebin(2)
-            signalHist = signalFile.Get(rinv).Clone("sig"+suff)
-            if rinv!="rT": signalHist.Rebin(2)
+            hname = rinv+"_"+mvar
+            print(hname)
+            bkgHist = getHist(bkgFile,hname,"bkg"+suff,mrange=(mmin,mmax),mvar=mvar)
+            sigHist = getHist(sigFile,hname,"sig"+suff,mrange=(mmin,mmax),mvar=mvar)
             sOverBHist = bkgHist.Clone("signif"+suff)
             sOverBEffHist = TH1D("signif_eff"+suff,"signif_eff"+suff,nbins,0,1)
             effHist = bkgHist.Clone("eff"+suff)
             effBkgHist = bkgHist.Clone("eff"+suff.replace(rinv,rinv+"_multijet"))
             for i in range(1, sOverBHist.GetNbinsX() + 1):
-                signalCount = signalHist.Integral(signalHist.GetXaxis().FindBin(bkgHist.GetBinCenter(i)), signalHist.GetNbinsX() + 1)
+                signalCount = sigHist.Integral(sigHist.GetXaxis().FindBin(bkgHist.GetBinCenter(i)), sigHist.GetNbinsX() + 1)
                 bkg = bkgHist.Integral(i, sOverBHist.GetNbinsX() + 1)
-                eff = signalCount/signalHist.Integral()
+                eff = signalCount/sigHist.Integral()
                 effBkg = bkg/bkgHist.Integral()
                 if bkg > 0:
                     sOverBHist.SetBinContent(i, signalCount/sqrt(bkg))
@@ -53,6 +71,8 @@ for mass in massList:
             outf.cd()
             sOverBHist.Write()
             sOverBEffHist.Write()
+            bkgHist.Write()
+            sigHist.Write()
             effHist.Write()
             effBkgHist.Write()
     outf.Close()

@@ -148,6 +148,9 @@ for entry in tqdm(range(0, numberOfEntries)):
     histos["metPhi"].Fill(met.Phi(), weight)
     histos["mTjj"].Fill(mTjj, weight)
     histos["rT"].Fill(met.Pt()/mTjj, weight)
+    histos["rT_maosjj"].Fill(met.Pt()/mTjj, maosjj['mass'], weight)
+    histos["rT_mjjRecomp"].Fill(met.Pt()/mTjj, mjjRecompose['mass'], weight)
+    histos["rT_mTjj"].Fill(met.Pt()/mTjj, mTjj, weight)
 
     for mjj,rk,suff in mjj_rk_suff:
         for rinv in rk:
