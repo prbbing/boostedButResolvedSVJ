@@ -43,13 +43,21 @@ compareSources = {
   },
   "2" : {
     "filePath"    :   dir+"/sOverB_Z500_GammaISR150_rinv.root",
+    "histPath"    :   ["signif_eff_rTmaos_Z500_GammaISR150_rinv0p9"],
+    "color"       :   15,
+    "style"       :   21,
+    "drawOption"  :   "histo",
+    "legendLabel" :   "r_{T}^{maos} selection",
+  },
+  "3" : {
+    "filePath"    :   dir+"/sOverB_Z500_GammaISR150_rinv.root",
     "histPath"    :   ["signif_eff_rinv_xy_ave_Z500_GammaISR150_rinv0p9"],
     "color"       :   9,
     "style"       :   21,
     "drawOption"  :   "histo",
     "legendLabel" :   "#bar{r}_{inv}^{(xy)} selection",
   },
-  "3" : {
+  "4" : {
     "filePath"    :   dir+"/sOverB_Z500_GammaISR150_rinv.root",
     "histPath"    :   ["signif_eff_rinv_t_ave_Z500_GammaISR150_rinv0p9"],
     "color"       :   8,
@@ -57,7 +65,7 @@ compareSources = {
     "drawOption"  :   "histo",
     "legendLabel" :   "#bar{r}_{inv}^{(T)} selection",
   },
-  "4" : {
+  "5" : {
     "filePath"    :   dir+"/sOverB_Z500_GammaISR150_rinv.root",
     "histPath"    :   ["signif_eff_rinv_xy_ave_maos_Z500_GammaISR150_rinv0p9"],
     "color"       :   46,
@@ -65,7 +73,7 @@ compareSources = {
     "drawOption"  :   "histo",
     "legendLabel" :   "#bar{r}_{inv}^{MAOS (xy)} selection",
   },
-  "5" : {
+  "6" : {
     "filePath"    :   dir+"/sOverB_Z500_GammaISR150_rinv.root",
     "histPath"    :   ["signif_eff_rinv_t_ave_maos_Z500_GammaISR150_rinv0p9"],
     "color"       :   42,

@@ -4,7 +4,7 @@ from ROOT import *
 
 massList = ["Z1000_JetISR500","Z500_GammaISR150"]
 signalList = ["rinv0p9", "rinv0p5", "rinv0p1"]
-rinvList = ["rT","rinv_x_ave","rinv_y_ave","rinv_xy_ave","rinv_t_ave"]
+rinvList = ["rT","rTmaos","rTdecomp","rinv_x_ave","rinv_y_ave","rinv_xy_ave","rinv_t_ave"]
 rinvList = rinvList + [rinv+"_maos" for rinv in rinvList if rinv.startswith("rinv")]
 # for mass window
 mvar = "maosjj"

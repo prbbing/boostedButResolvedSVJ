@@ -141,16 +141,27 @@ for entry in tqdm(range(0, numberOfEntries)):
         continue
     sum_sel = sum_sel + weight
 
+    rT = met.Pt()/mTjj
+    rTmaos = met.Pt()/maosjj['mass']
+    rTdecomp = met.Pt()/mjjRecompose['mass']
     histos["maosjj"].Fill(maosjj['mass'], weight)
     histos["mjjRecomp"].Fill(mjjRecompose['mass'], weight)
     histos["maosjj_mjjRecomp"].Fill(maosjj['mass'], mjjRecompose['mass'], weight)
     histos["metMET"].Fill(met.Pt(), weight)
     histos["metPhi"].Fill(met.Phi(), weight)
     histos["mTjj"].Fill(mTjj, weight)
-    histos["rT"].Fill(met.Pt()/mTjj, weight)
-    histos["rT_maosjj"].Fill(met.Pt()/mTjj, maosjj['mass'], weight)
-    histos["rT_mjjRecomp"].Fill(met.Pt()/mTjj, mjjRecompose['mass'], weight)
-    histos["rT_mTjj"].Fill(met.Pt()/mTjj, mTjj, weight)
+    histos["rT"].Fill(rT, weight)
+    histos["rT_maosjj"].Fill(rT, maosjj['mass'], weight)
+    histos["rT_mjjRecomp"].Fill(rT, mjjRecompose['mass'], weight)
+    histos["rT_mTjj"].Fill(rT, mTjj, weight)
+    histos["rTmaos"].Fill(rTmaos, weight)
+    histos["rTmaos_maosjj"].Fill(rTmaos, maosjj['mass'], weight)
+    histos["rTmaos_mjjRecomp"].Fill(rTmaos, mjjRecompose['mass'], weight)
+    histos["rTmaos_mTjj"].Fill(rTmaos, mTjj, weight)
+    histos["rTdecomp"].Fill(rTdecomp, weight)
+    histos["rTdecomp_maosjj"].Fill(rTdecomp, maosjj['mass'], weight)
+    histos["rTdecomp_mjjRecomp"].Fill(rTdecomp, mjjRecompose['mass'], weight)
+    histos["rTdecomp_mTjj"].Fill(rTdecomp, mTjj, weight)
 
     for mjj,rk,suff in mjj_rk_suff:
         for rinv in rk:
@@ -159,6 +170,9 @@ for entry in tqdm(range(0, numberOfEntries)):
             histos[rinv+'_ave'+suff+'_maosjj'].Fill(mjj[rinv][2], maosjj['mass'], weight)
             histos[rinv+'_ave'+suff+'_mjjRecomp'].Fill(mjj[rinv][2], mjjRecompose['mass'], weight)
             histos[rinv+'_ave'+suff+'_mTjj'].Fill(mjj[rinv][2], mTjj, weight)
+            histos[rinv+'_ave'+suff+'_rT'].Fill(mjj[rinv][2], rT, weight)
+            histos[rinv+'_ave'+suff+'_rTmaos'].Fill(mjj[rinv][2], rTmaos, weight)
+            histos[rinv+'_ave'+suff+'_rTdecomp'].Fill(mjj[rinv][2], rTdecomp, weight)
 
     histos["leadjPt"].Fill(lead_j.Pt(), weight)
     histos["leadjEta"].Fill(lead_j.Eta(), weight)
