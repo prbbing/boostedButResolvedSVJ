@@ -212,7 +212,7 @@ def drawStackPlot(taskSetup, stackSources, outputFile):
     normalizations.append(histTmp.Integral())
     hists.append(histTmp)
     histTmp.SetDirectory(0)
-    histTmp.Rebin(rebinFactor)
+    if rebinFactor!=1: histTmp.Rebin(rebinFactor)
     oneDHistSetting(histTmp)
     histTmp.SetFillStyle(1001)
     histTmp.SetFillColorAlpha(stackSources[stackSource]["color"],0.7)
@@ -475,12 +475,12 @@ def drawComparisonPlot(taskSetup, compareSources, outputFile):
       for histPath in compareSources[compareSource]["histPath"][1:]:
         histTmp.Add(inputFile.Get(histPath))
     
-    histTmp.Rebin(rebinFactor)
+    if rebinFactor!=1: histTmp.Rebin(rebinFactor)
     
     if normalized:
       histTmp.Sumw2()
       histTmp.Scale(1/histTmp.Integral()) 
-    histTmp.SetDirectory(0)
+    if hasattr(histTmp, 'SetDirectory'): histTmp.SetDirectory(0)
     
     oneDHistSetting(histTmp)
     histTmp.SetTitle("")
@@ -490,8 +490,8 @@ def drawComparisonPlot(taskSetup, compareSources, outputFile):
     histTmp.SetLineColor(compareSources[compareSource]["color"])
     histTmp.SetLineWidth(2)
     histTmp.SetLineStyle(1)
-    histTmp.SetAxisRange(Ymin,Ymax,"y")
-    histTmp.SetAxisRange(Xmin,Xmax,"x")
+    #histTmp.SetAxisRange(Ymin,Ymax,"y")
+    #histTmp.SetAxisRange(Xmin,Xmax,"x")
     
     drawOption = compareSources[compareSource]["drawOption"]
     legendDrawOption = "lep"
