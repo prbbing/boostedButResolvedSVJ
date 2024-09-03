@@ -1191,7 +1191,7 @@ void rinv_var_compare_Z1000_rinv0p5()
    entry->SetMarkerStyle(21);
    entry->SetMarkerSize(1);
    entry->SetTextFont(42);
-   entry=leg->AddEntry("rinv_xy_ave_maos","#bar{r'}_{inv} (m_{Z'} = 1.0 TeV, r_{inv} = 0.5)","l");
+   entry=leg->AddEntry("rinv_xy_ave_maos","#bar{r}_{inv}#kern[-4.25]{'}#kern[1.25]{ }(m_{Z'} = 1.0 TeV, r_{inv} = 0.5)","l");
    entry->SetLineColor(9);
    entry->SetLineStyle(2);
    entry->SetLineWidth(4);
@@ -1207,7 +1207,7 @@ void rinv_var_compare_Z1000_rinv0p5()
    entry->SetMarkerStyle(21);
    entry->SetMarkerSize(1);
    entry->SetTextFont(42);
-   entry=leg->AddEntry("rinv_xy_ave_maos","#bar{r'}_{inv} (Multijet)","l");
+   entry=leg->AddEntry("rinv_xy_ave_maos","#bar{r}_{inv}#kern[-4.25]{'}#kern[1.25]{ }(Multijet)","l");
    entry->SetLineColor(30);
    entry->SetLineStyle(6);
    entry->SetLineWidth(4);
@@ -1267,4 +1267,5 @@ void rinv_var_compare_Z1000_rinv0p5()
    canvas_rinv_compare_Z1000_GammaISR500_rinv0p5->cd();
    canvas_rinv_compare_Z1000_GammaISR500_rinv0p5->Modified();
    canvas_rinv_compare_Z1000_GammaISR500_rinv0p5->SetSelected(canvas_rinv_compare_Z1000_GammaISR500_rinv0p5);
+   canvas_rinv_compare_Z1000_GammaISR500_rinv0p5->ToggleToolBar();
 }

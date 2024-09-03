@@ -1199,7 +1199,7 @@ void rinv_var_compare_Z500_rinv0p9()
    leg->SetLineWidth(1);
    leg->SetFillColor(0);
    leg->SetFillStyle(0);
-   TLegendEntry *entry=leg->AddEntry("rinv_xy_ave","#bar{r'}_{inv} (m_{Z'} = 0.5 TeV, r_{inv} = 0.9)","l");
+   TLegendEntry *entry=leg->AddEntry("rinv_xy_ave","#bar{r}_{inv} (m_{Z'} = 0.5 TeV, r_{inv} = 0.9)","l");
    entry->SetLineColor(1);
    entry->SetLineStyle(1);
    entry->SetLineWidth(4);
@@ -1207,7 +1207,7 @@ void rinv_var_compare_Z500_rinv0p9()
    entry->SetMarkerStyle(21);
    entry->SetMarkerSize(1);
    entry->SetTextFont(42);
-   entry=leg->AddEntry("rinv_xy_ave_maos","#bar{r'}_{inv} (m_{Z'} = 0.5 TeV, r_{inv} = 0.9)","l");
+   entry=leg->AddEntry("rinv_xy_ave_maos","#bar{r}_{inv}#kern[-4.25]{'}#kern[1.25]{ }(m_{Z'} = 0.5 TeV, r_{inv} = 0.9)","l");
    entry->SetLineColor(9);
    entry->SetLineStyle(2);
    entry->SetLineWidth(4);
@@ -1223,7 +1223,7 @@ void rinv_var_compare_Z500_rinv0p9()
    entry->SetMarkerStyle(21);
    entry->SetMarkerSize(1);
    entry->SetTextFont(42);
-   entry=leg->AddEntry("rinv_xy_ave_maos","#bar{r'}_{inv} (Multijet)","l");
+   entry=leg->AddEntry("rinv_xy_ave_maos","#bar{r}_{inv}#kern[-4.25]{'}#kern[1.25]{ }(Multijet)","l");
    entry->SetLineColor(30);
    entry->SetLineStyle(6);
    entry->SetLineWidth(4);
