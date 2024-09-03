@@ -323,6 +323,7 @@ void rinv_var_compare_Z1000_rinv0p5()
    rinv_xy_ave__2->SetDirectory(nullptr);
    rinv_xy_ave__2->SetStats(0);
    rinv_xy_ave__2->SetLineWidth(4);
+   rinv_xy_ave__2->SetLineColor(9);
    rinv_xy_ave__2->SetMarkerStyle(21);
    rinv_xy_ave__2->GetXaxis()->SetRange(63,76);
    rinv_xy_ave__2->GetXaxis()->SetNdivisions(505);
@@ -870,7 +871,7 @@ void rinv_var_compare_Z1000_rinv0p5()
    rinv_xy_ave__4->SetDirectory(nullptr);
    rinv_xy_ave__4->SetStats(0);
    rinv_xy_ave__4->SetLineColor(50);
-   rinv_xy_ave__4->SetLineStyle(9);
+   rinv_xy_ave__4->SetLineStyle(1);
    rinv_xy_ave__4->SetLineWidth(4);
    rinv_xy_ave__4->SetMarkerColor(13);
    rinv_xy_ave__4->SetMarkerStyle(21);
@@ -1152,8 +1153,8 @@ void rinv_var_compare_Z1000_rinv0p5()
    rinv_xy_ave_maos__5->SetEntries(77648);
    rinv_xy_ave_maos__5->SetDirectory(nullptr);
    rinv_xy_ave_maos__5->SetStats(0);
-   rinv_xy_ave_maos__5->SetLineColor(30);
-   rinv_xy_ave_maos__5->SetLineStyle(6);
+   rinv_xy_ave_maos__5->SetLineColor(50);
+   rinv_xy_ave_maos__5->SetLineStyle(2);
    rinv_xy_ave_maos__5->SetLineWidth(4);
    rinv_xy_ave_maos__5->SetMarkerColor(13);
    rinv_xy_ave_maos__5->SetMarkerStyle(21);
@@ -1183,7 +1184,7 @@ void rinv_var_compare_Z1000_rinv0p5()
    leg->SetLineWidth(1);
    leg->SetFillColor(0);
    leg->SetFillStyle(0);
-   TLegendEntry *entry=leg->AddEntry("rinv_xy_ave","#bar{r}_{inv} (m_{Z'} = 1.0 TeV, r_{inv} = 0.5)","l");
+   TLegendEntry *entry=leg->AddEntry("rinv_xy_ave","#bar{r}_{inv}","l");
    entry->SetLineColor(1);
    entry->SetLineStyle(1);
    entry->SetLineWidth(4);
@@ -1191,25 +1192,25 @@ void rinv_var_compare_Z1000_rinv0p5()
    entry->SetMarkerStyle(21);
    entry->SetMarkerSize(1);
    entry->SetTextFont(42);
-   entry=leg->AddEntry("rinv_xy_ave_maos","#bar{r}_{inv}#kern[-4.25]{'}#kern[1.25]{ }(m_{Z'} = 1.0 TeV, r_{inv} = 0.5)","l");
-   entry->SetLineColor(9);
+   entry=leg->AddEntry("rinv_xy_ave_maos","#bar{r}_{inv}#kern[-4.25]{'}","l");
+   entry->SetLineColor(1);
    entry->SetLineStyle(2);
    entry->SetLineWidth(4);
    entry->SetMarkerColor(1);
    entry->SetMarkerStyle(21);
    entry->SetMarkerSize(1);
    entry->SetTextFont(42);
-   entry=leg->AddEntry("rinv_xy_ave","#bar{r}_{inv} (Multijet)","l");
-   entry->SetLineColor(50);
-   entry->SetLineStyle(9);
+   entry=leg->AddEntry("rinv_xy_ave","m_{Z'} = 1.0 TeV, r_{inv} = 0.5","l");
+   entry->SetLineColor(9);
+   entry->SetLineStyle(1);
    entry->SetLineWidth(4);
    entry->SetMarkerColor(1);
    entry->SetMarkerStyle(21);
    entry->SetMarkerSize(1);
    entry->SetTextFont(42);
-   entry=leg->AddEntry("rinv_xy_ave_maos","#bar{r}_{inv}#kern[-4.25]{'}#kern[1.25]{ }(Multijet)","l");
-   entry->SetLineColor(30);
-   entry->SetLineStyle(6);
+   entry=leg->AddEntry("rinv_xy_ave_maos","Multijet","l");
+   entry->SetLineColor(50);
+   entry->SetLineStyle(1);
    entry->SetLineWidth(4);
    entry->SetMarkerColor(1);
    entry->SetMarkerStyle(21);
@@ -1268,4 +1269,5 @@ void rinv_var_compare_Z1000_rinv0p5()
    canvas_rinv_compare_Z1000_GammaISR500_rinv0p5->Modified();
    canvas_rinv_compare_Z1000_GammaISR500_rinv0p5->SetSelected(canvas_rinv_compare_Z1000_GammaISR500_rinv0p5);
    canvas_rinv_compare_Z1000_GammaISR500_rinv0p5->ToggleToolBar();
+   canvas_rinv_compare_Z1000_GammaISR500_rinv0p5->Print("rinv_var_compare_Z1000_rinv0p5.pdf");
 }
