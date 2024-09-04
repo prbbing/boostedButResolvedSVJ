@@ -179,7 +179,7 @@ def drawStackPlot(taskSetup, stackSources, outputFile):
   legend.SetBorderSize(0)
   legend.SetTextFont(42)
   legend.SetFillColor(0)
-  legend.SetTextSize(0.03)
+  legend.SetTextSize(0.03512593)
   legend.SetFillStyle(0)
 
   normalizations = []
@@ -449,7 +449,7 @@ def drawComparisonPlot(taskSetup, compareSources, outputFile):
   legend.SetBorderSize(0)
   legend.SetTextFont(42)
   legend.SetFillColor(0)
-  legend.SetTextSize(0.03)
+  legend.SetTextSize(0.03512593)
   legend.SetFillStyle(0)
  
   canvas.cd(1)
