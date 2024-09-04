@@ -40,7 +40,11 @@ def drawAtlasLabel(label, inputLumi, inputCME, shift = 0.0, doRatio = 0):
   CMELUMI = formatLumi(inputLumi, inputCME)
   # Lumi label 
   myText(0.19, 0.89, 1, 0.04, CMELUMI)
-  myText(0.19,0.83,1,0.04,label)
+  if "splitline" in label:
+    x = 0.815
+  else:
+    x = 0.83
+  myText(0.19,x,1,0.04,label)
 
 def drawLabel(h,nameX,nameY):
   ax=h.GetXaxis()
