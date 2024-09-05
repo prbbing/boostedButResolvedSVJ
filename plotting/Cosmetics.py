@@ -40,20 +40,24 @@ def drawAtlasLabel(label, inputLumi, inputCME, shift = 0.0, doRatio = 0):
   CMELUMI = formatLumi(inputLumi, inputCME)
   # Lumi label 
   myText(0.19, 0.89, 1, 0.04, CMELUMI)
-  myText(0.19,0.83,1,0.04,label)
+  if "splitline" in label:
+    x = 0.815
+  else:
+    x = 0.83
+  myText(0.19,x,1,0.04,label)
 
 def drawLabel(h,nameX,nameY):
   ax=h.GetXaxis()
   ax.SetTitle( nameX )
   ay=h.GetYaxis()
   ay.SetTitle( nameY )
-  ax.SetLabelSize(0.03)
-  ay.SetLabelSize(0.03)
-  ax.SetTitleSize(0.03)
-  ay.SetTitleSize(0.03)
-  ax.SetTitleOffset(1.8)
+  ax.SetLabelSize(0.04)
+  ay.SetLabelSize(0.04)
+  ax.SetTitleSize(0.05)
+  ay.SetTitleSize(0.05)
+  ax.SetTitleOffset(1.5)
   ay.SetTitleOffset(1.5)
-  ax.SetLabelOffset(0.01) 
+  ax.SetLabelOffset(0.01)
   ay.SetLabelOffset(0.008)
   ax.SetNdivisions(505)
   ay.SetNdivisions(505)

@@ -15,7 +15,7 @@ taskSetup = {
   "rebinFactor" : 1,
   "doFraction"  : 0,
   "doRatio" : 0,
-  "masterLabel" : "Z' (0.5 TeV), p_{T}^{ISR} > 150 GeV",
+  "masterLabel" : "#splitline{Z' (0.5 TeV)}{p_{T}^{ISR} > 150 GeV}",
   "lumi" : -1,
   "cme"  : 13,
   "relErrMax" : 99999,
@@ -47,6 +47,6 @@ compareSources = {
     "color"       :   46,
     "style"       :   21,
     "drawOption"  :   "pzl",
-    "legendLabel" :   "#bar{r}_{inv}^{MAOS}",
+    "legendLabel" :   "#bar{r}_{inv}#kern[-4.25]{'}",
   },
 }
