@@ -601,6 +601,8 @@ module PdgCodeFilter NeutrinoFilter {
   add PdgCode {-16}
   add PdgCode {51}
   add PdgCode {53}
+  add PdgCode {-51}
+  add PdgCode {-53}
 
 }
 
