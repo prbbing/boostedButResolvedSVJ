@@ -1,4 +1,4 @@
-from ROOT import *
+import ROOT as r
 from RootPlottingCore import *
 import optparse
 import os
@@ -10,7 +10,7 @@ parser.add_option('-b','--batchMode',   dest='batchMode', help='Run in batch mod
 (arguments, args) = parser.parse_args()
 
 if arguments.batchMode:
-  gROOT.SetBatch(True) 
+  r.gROOT.SetBatch(True) 
 
 if arguments.localConfig:
   sys.path.append(os.getcwd())
@@ -20,7 +20,7 @@ else:
   print("Local configuration file not given. Aborting!")
   sys.exit(0)
 
-outputFile = TFile(outputPath, "RECREATE","")
+outputFile = r.TFile(outputPath, "RECREATE","")
 
 outputFile.cd()
 drawComparisonPlot(taskSetup, compareSources, outputFile)
