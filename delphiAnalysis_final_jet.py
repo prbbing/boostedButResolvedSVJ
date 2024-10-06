@@ -216,6 +216,7 @@ for entry in tqdm(range(0, numberOfEntries)):
             histos[rinv+'_ave'+suff+'_mTjj'].Fill(mjj[rinv][2], mTjj, weight)
 
     histos["leadjPt"].Fill(lead_j.Pt(), weight)
+    histos["yStar"].Fill(yStar, weight)
     histos["leadjEta"].Fill(lead_j.Eta(), weight)
     histos["leadjPhi"].Fill(lead_j.Phi(), weight)
     histos["leadjEtaPhi"].Fill(lead_j.Eta(), lead_j.Phi(), weight)
