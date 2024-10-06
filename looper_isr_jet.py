@@ -5,20 +5,20 @@ from XS import crossSections
 
 isrs = {
   1000: {
-    "0to100"   : 44.1,
-    "100to200" : 5.9,
-    "200to300" : 1.86,
-    "300to400" : 0.75,
-    "400to500" : 0.37,
-    "500toinf" : 0.42,
+    "0to100"   : 44.1*5.76/53.4,
+    "100to200" : 5.9*5.76/53.4,
+    "200to300" : 1.86*5.76/53.4,
+    "300to400" : 0.75*5.76/53.4,
+    "400to500" : 0.37*5.76/53.4,
+    "500toinf" : 0.42*5.76/53.4,
   },
   500: {
-    "0to100"   : 352.8,
-    "100to200" : 31.02,
-    "200to300" : 8.35,
-    "300to400" : 2.86,
-    "400to500" : 1.14,
-    "500toinf" : 1.00,
+    "0to100"   : 352.8*86.511/397,
+    "100to200" : 31.02*86.511/397,
+    "200to300" : 8.35*86.511/397,
+    "300to400" : 2.86*86.511/397,
+    "400to500" : 1.14*86.511/397,
+    "500toinf" : 1.00*86.511/397,
   }
 }
 
@@ -43,7 +43,7 @@ weight = {
 
 if "bing" in os.environ["USER"]:
   sample_dir = "/Users/adminbingxuanliu/Library/CloudStorage/Dropbox/BoostedButResolvedSVJ/NewSignalFatJetPt50/"
-  flags = "-c"
+  flags = "-c --presel"
 else:
   sample_dir = "../"
   flags = "--presel"
