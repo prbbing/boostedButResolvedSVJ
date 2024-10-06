@@ -7,7 +7,7 @@ signalList = ["rinv0p9", "rinv0p5", "rinv0p1"]
 rinvList = ["rT","rinv_x_ave","rinv_y_ave","rinv_xy_ave","rinv_t_ave"]
 rinvList = rinvList + [rinv+"_maos" for rinv in rinvList if rinv.startswith("rinv")]
 # for mass window
-mvar = "mTjj"
+mvar = "maosjj"
 # for sOverB vs eff
 nbins = 20
 
@@ -29,11 +29,11 @@ for mass in massList:
     mzprime = float(mass.split('_')[0][1:])
     mmin = 1/2*mzprime
     mmax = 3/2*mzprime
-    outf = TFile("sOverB_"+mass+"_rinv.root", "RECREATE")
-    bkgFile = TFile("output_multijet_"+mass.split('_')[1]+".root")
+    outf = TFile("sOverB_"+mass+"_rinv_yStar0p8.root", "RECREATE")
+    bkgFile = TFile("output_multijet_"+mass.split('_')[1]+"_yStar0p8.root")
     for signal in signalList:
         print(signal)
-        sigFile = TFile("output_"+ mass + "_" + signal + ".root")
+        sigFile = TFile("output_"+ mass + "_" + signal + "_yStar0p8.root")
         for rinv in rinvList:
             suff = "_"+rinv+"_"+mass+"_"+signal
             hname = rinv+"_"+mvar
