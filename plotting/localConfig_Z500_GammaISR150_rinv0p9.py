@@ -49,14 +49,6 @@ compareSources = {
     "drawOption"  :   "histo",
     "legendLabel" :   "#bar{r}_{inv} selection",
   },
-#  "3" : {
-#    "filePath"    :   dir+"/sOverB_Z500_GammaISR150_rinv_yStar0p8.root",
-#    "histPath"    :   ["signif_eff_rinv_t_ave_Z500_GammaISR150_rinv0p9"],
-#    "color"       :   8,
-#    "style"       :   21,
-#    "drawOption"  :   "histo",
-#    "legendLabel" :   "#bar{r}_{inv}^{(T)} selection",
-#  },
   "3" : {
     "filePath"    :   dir+"/sOverB_Z500_GammaISR150_rinv_yStar0p8.root",
     "histPath"    :   ["signif_eff_rinv_xy_ave_maos_Z500_GammaISR150_rinv0p9"],
@@ -65,12 +57,4 @@ compareSources = {
     "drawOption"  :   "histo",
     "legendLabel" :   "#bar{r'}_{inv} selection",
   },
-#  "5" : {
-#    "filePath"    :   dir+"/sOverB_Z500_GammaISR150_rinv_yStar0p8.root",
-#    "histPath"    :   ["signif_eff_rinv_t_ave_maos_Z500_GammaISR150_rinv0p9"],
-#    "color"       :   42,
-#    "style"       :   21,
-#    "drawOption"  :   "histo",
-#    "legendLabel" :   "#bar{r}_{inv}^{MAOS (T)} selection",
-#  },
 }

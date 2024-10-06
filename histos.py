@@ -77,6 +77,14 @@ rT = r.TH1D("rT","rT",200,0,5),
 rT_maosjj = r.TH2D("rT_maosjj","rT_maosjj",200,0,5,40,0,2000),
 rT_mjjRecomp = r.TH2D("rT_mjjRecomp","rT_mjjRecomp",40,0,1,40,0,2000),
 rT_mTjj = r.TH2D("rT_mTjj","rT_mTjj",40,0,1,40,0,2000),
+rTmaos = r.TH1D("rTmaos","rTmaos",40,0,1),
+rTmaos_maosjj = r.TH2D("rTmaos_maosjj","rTmaos_maosjj",40,0,1,40,0,2000),
+rTmaos_mjjRecomp = r.TH2D("rTmaos_mjjRecomp","rTmaos_mjjRecomp",40,0,1,40,0,2000),
+rTmaos_mTjj = r.TH2D("rTmaos_mTjj","rTmaos_mTjj",40,0,1,40,0,2000),
+rTdecomp = r.TH1D("rTdecomp","rTdecomp",40,0,1),
+rTdecomp_maosjj = r.TH2D("rTdecomp_maosjj","rTdecomp_maosjj",40,0,1,40,0,2000),
+rTdecomp_mjjRecomp = r.TH2D("rTdecomp_mjjRecomp","rTdecomp_mjjRecomp",40,0,1,40,0,2000),
+rTdecomp_mTjj = r.TH2D("rTdecomp_mTjj","rTdecomp_mTjj",40,0,1,40,0,2000),
 
 # MET-X system kinematics
 
@@ -135,5 +143,8 @@ def rinv_histos(rinvs,suff):
             rinv+'_ave'+suff+'_maosjj': r.TH2D(rinv+'_ave'+suff+'_maosjj', rinv+'_ave'+suff+'_maosjj', 500,-5,5, 40,0,2000),
             rinv+'_ave'+suff+'_mjjRecomp': r.TH2D(rinv+'_ave'+suff+'_mjjRecomp', rinv+'_ave'+suff+'_mjjRecomp', 500,-5,5, 40,0,2000),
             rinv+'_ave'+suff+'_mTjj': r.TH2D(rinv+'_ave'+suff+'_mTjj', rinv+'_ave'+suff+'_mTjj', 500,-5,5, 40,0,2000),
+            rinv+'_ave'+suff+'_rT': r.TH2D(rinv+'_ave'+suff+'_rT', rinv+'_ave'+suff+'_rT', 500,-5,5, 40,0,1),
+            rinv+'_ave'+suff+'_rTmaos': r.TH2D(rinv+'_ave'+suff+'_rTmaos', rinv+'_ave'+suff+'_rTmaos', 500,-5,5, 40,0,1),
+            rinv+'_ave'+suff+'_rTdecomp': r.TH2D(rinv+'_ave'+suff+'_rTdecomp', rinv+'_ave'+suff+'_rTdecomp', 500,-5,5, 40,0,1),
         })
     return histos
