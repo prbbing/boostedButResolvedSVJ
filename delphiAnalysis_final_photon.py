@@ -5,6 +5,7 @@ parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFo
 parser.add_argument("-i","--input", type=str, required=True, default=None, help="input filename")
 parser.add_argument("-o","--output", type=str, required=True, default=None, help="output filename")
 parser.add_argument("-y","--yStarcut", type=float, default=10, help="yStar Cut")
+parser.add_argument('-P',"--ptcut", type=float, default=150, help="ISR photon pt cut.")
 parser.add_argument("-c","--cool", action='store_true', help="Someone cool is using a MAC m1. But by default, not everyone is cool.")
 parser.add_argument("-w","--lumiWeight", type=float, default=1, help="luminosity weight")
 parser.add_argument("-x","--xs", type=float, default=0, help="Production cross section")
@@ -101,7 +102,7 @@ for entry in tqdm(range(0, numberOfEntries)):
 
   #Leading jets kinematics
   
-  if photon.Pt() > 150:
+  if photon.Pt() > args.ptcut:
     if lead_j.Pt() < 25 or sublead_j.Pt() < 25:
       continue
     if abs(lead_j.DeltaPhi(sublead_j)) < 0.8:
@@ -159,8 +160,8 @@ for entry in tqdm(range(0, numberOfEntries)):
             histos[rinv+'_ave'+suff+'_maosjj'].Fill(mjj[rinv][2], maosjj['mass'], weight)
             histos[rinv+'_ave'+suff+'_mjjRecomp'].Fill(mjj[rinv][2], mjjRecompose['mass'], weight)
             histos[rinv+'_ave'+suff+'_mTjj'].Fill(mjj[rinv][2], mTjj, weight)
-
     histos["leadjPt"].Fill(lead_j.Pt(), weight)
+    histos["yStar"].Fill(yStar, weight)
     histos["leadjEta"].Fill(lead_j.Eta(), weight)
     histos["leadjPhi"].Fill(lead_j.Phi(), weight)
 
