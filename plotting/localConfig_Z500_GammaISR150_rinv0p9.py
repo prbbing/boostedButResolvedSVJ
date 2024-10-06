@@ -28,13 +28,13 @@ taskSetup = {
 }
 
 if "bing" in os.environ["USER"]:
-    dir = "/Users/adminbingxuanliu/Work/boostedButResolvedSVJ/realSel"
+    dir = "/Users/adminbingxuanliu/Work/boostedButResolvedSVJ/jhep_version/"
 else:
     dir = "."
 
 compareSources = {
   "1" : {
-    "filePath"    :   dir+"/sOverB_Z500_GammaISR150_rinv.root",
+    "filePath"    :   dir+"/sOverB_Z500_GammaISR150_rinv_yStar0p8.root",
     "histPath"    :   ["signif_eff_rT_Z500_GammaISR150_rinv0p9"],
     "color"       :   1,
     "style"       :   21,
@@ -42,35 +42,35 @@ compareSources = {
     "legendLabel" :   "r_{T} selection",
   },
   "2" : {
-    "filePath"    :   dir+"/sOverB_Z500_GammaISR150_rinv.root",
+    "filePath"    :   dir+"/sOverB_Z500_GammaISR150_rinv_yStar0p8.root",
     "histPath"    :   ["signif_eff_rinv_xy_ave_Z500_GammaISR150_rinv0p9"],
     "color"       :   9,
     "style"       :   21,
     "drawOption"  :   "histo",
-    "legendLabel" :   "#bar{r}_{inv}^{(xy)} selection",
+    "legendLabel" :   "#bar{r}_{inv} selection",
   },
+#  "3" : {
+#    "filePath"    :   dir+"/sOverB_Z500_GammaISR150_rinv_yStar0p8.root",
+#    "histPath"    :   ["signif_eff_rinv_t_ave_Z500_GammaISR150_rinv0p9"],
+#    "color"       :   8,
+#    "style"       :   21,
+#    "drawOption"  :   "histo",
+#    "legendLabel" :   "#bar{r}_{inv}^{(T)} selection",
+#  },
   "3" : {
-    "filePath"    :   dir+"/sOverB_Z500_GammaISR150_rinv.root",
-    "histPath"    :   ["signif_eff_rinv_t_ave_Z500_GammaISR150_rinv0p9"],
-    "color"       :   8,
-    "style"       :   21,
-    "drawOption"  :   "histo",
-    "legendLabel" :   "#bar{r}_{inv}^{(T)} selection",
-  },
-  "4" : {
-    "filePath"    :   dir+"/sOverB_Z500_GammaISR150_rinv.root",
+    "filePath"    :   dir+"/sOverB_Z500_GammaISR150_rinv_yStar0p8.root",
     "histPath"    :   ["signif_eff_rinv_xy_ave_maos_Z500_GammaISR150_rinv0p9"],
     "color"       :   46,
     "style"       :   21,
     "drawOption"  :   "histo",
-    "legendLabel" :   "#bar{r}_{inv}^{MAOS (xy)} selection",
+    "legendLabel" :   "#bar{r'}_{inv} selection",
   },
-  "5" : {
-    "filePath"    :   dir+"/sOverB_Z500_GammaISR150_rinv.root",
-    "histPath"    :   ["signif_eff_rinv_t_ave_maos_Z500_GammaISR150_rinv0p9"],
-    "color"       :   42,
-    "style"       :   21,
-    "drawOption"  :   "histo",
-    "legendLabel" :   "#bar{r}_{inv}^{MAOS (T)} selection",
-  },
+#  "5" : {
+#    "filePath"    :   dir+"/sOverB_Z500_GammaISR150_rinv_yStar0p8.root",
+#    "histPath"    :   ["signif_eff_rinv_t_ave_maos_Z500_GammaISR150_rinv0p9"],
+#    "color"       :   42,
+#    "style"       :   21,
+#    "drawOption"  :   "histo",
+#    "legendLabel" :   "#bar{r}_{inv}^{MAOS (T)} selection",
+#  },
 }
