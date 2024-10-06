@@ -2,8 +2,7 @@ import os,sys,re
 from pathlib import Path
 from math import *
 from array import *
-from ROOT import *
-
+import ROOT as r
 from Cosmetics import *
 
 
@@ -50,7 +49,7 @@ def ratioHistogram( numHist, denHist, yLabel = "", relErrMax = 0.10, xMin = 0.0,
       return regroup(groups[:iLo] + [groups[iLo]+groups[iHi]] + groups[iHi+1:])
 
   groups = regroup( [(i,) for i in range(1,1+numHist.GetNbinsX())] )
-  ratio = TH1F("ratio","",len(groups), array('d', [numHist.GetBinLowEdge(min(g)) for g in groups ] + [numHist.GetXaxis().GetBinUpEdge(numHist.GetNbinsX())]) )
+  ratio = r.TH1F("ratio","",len(groups), array('d', [numHist.GetBinLowEdge(min(g)) for g in groups ] + [numHist.GetXaxis().GetBinUpEdge(numHist.GetNbinsX())]) )
   ratio.GetXaxis().SetTitle(numHist.GetXaxis().GetTitle())
   for i,g in enumerate(groups) :
     ratio.SetBinContent(i+1,groupR(g))
@@ -145,7 +144,7 @@ def drawStackPlot(taskSetup, stackSources, outputFile):
   ratioYmin   =  taskSetup["ratioYmin"]
   ratioYmax   =  taskSetup["ratioYmax"]
 
-  canvas = TCanvas("canvas_"+taskSetup["name"], taskSetup["name"],10,10,600,600)
+  canvas = r.TCanvas("canvas_"+taskSetup["name"], taskSetup["name"],10,10,600,600)
   if taskSetup["doRatio"]: 
     canvas.SetFillStyle(0)
     canvas.Divide(1,2)
@@ -173,13 +172,13 @@ def drawStackPlot(taskSetup, stackSources, outputFile):
 
   canvas.cd(1)
   gPadSetup(doLogy)
-  stack = THStack("stack",name)
+  stack = r.THStack("stack",name)
     
-  legend = TLegend(0.7, 0.93 - 0.06*len(stackSources), 0.9, 0.93)
+  legend = r.TLegend(0.7, 0.93 - 0.06*len(stackSources), 0.9, 0.93)
   legend.SetBorderSize(0)
   legend.SetTextFont(42)
   legend.SetFillColor(0)
-  legend.SetTextSize(0.03)
+  legend.SetTextSize(0.03512593)
   legend.SetFillStyle(0)
 
   normalizations = []
@@ -196,7 +195,7 @@ def drawStackPlot(taskSetup, stackSources, outputFile):
   for element in range(0,totalMCInputs):
     stackSource = str(element + 1)
     fileName  = stackSources[stackSource]["filePath"]
-    inputFile = TFile(fileName)
+    inputFile = r.TFile(fileName)
     if inputFile.IsZombie() or not inputFile.GetNkeys():
       print("Can not open file: " + fileName)
       continue
@@ -212,7 +211,7 @@ def drawStackPlot(taskSetup, stackSources, outputFile):
     normalizations.append(histTmp.Integral())
     hists.append(histTmp)
     histTmp.SetDirectory(0)
-    histTmp.Rebin(rebinFactor)
+    if rebinFactor!=1: histTmp.Rebin(rebinFactor)
     oneDHistSetting(histTmp)
     histTmp.SetFillStyle(1001)
     histTmp.SetFillColorAlpha(stackSources[stackSource]["color"],0.7)
@@ -228,7 +227,7 @@ def drawStackPlot(taskSetup, stackSources, outputFile):
   # Determine the total data yields and compute the scale factors to be applied to MC if scaleToData = 1 
   scaleFactor = 1
   if "data" in stackSources:
-    dataFile = TFile(stackSources["data"]["filePath"]) 
+    dataFile = r.TFile(stackSources["data"]["filePath"]) 
     dataHist = dataFile.Get(stackSources["data"]["histPath"][0]).Clone()
     # hist path is now a list of paths, so add them all together first,
     # use first one to define histTmp
@@ -297,7 +296,7 @@ def drawStackPlot(taskSetup, stackSources, outputFile):
   bkgHist.SetLineWidth(0) 
 
   if "data" in stackSources:
-    dataFile = TFile(stackSources["data"]["filePath"]) 
+    dataFile = r.TFile(stackSources["data"]["filePath"]) 
     dataHist = dataFile.Get(stackSources["data"]["histPath"][0]).Clone()
     # hist path is now a list of paths, so add them all together first,
     # use first one to define histTmp
@@ -416,7 +415,7 @@ def drawComparisonPlot(taskSetup, compareSources, outputFile):
   ratioYmax   =  taskSetup["ratioYmax"]
   normalized = taskSetup["normalized"]
  
-  canvas = TCanvas("canvas_"+taskSetup["name"],taskSetup["name"],10,10,600,600)
+  canvas = r.TCanvas("canvas_"+taskSetup["name"],taskSetup["name"],10,10,600,600)
   if doRatio and len(compareSources) > 1: 
     canvas.SetFillStyle(0)
     canvas.Divide(1,2)
@@ -445,15 +444,15 @@ def drawComparisonPlot(taskSetup, compareSources, outputFile):
   canvas.cd(1)
   gPadSetup(doLogy)
     
-  legend = TLegend(0.6, 0.93 - 0.06*len(compareSources), 0.9, 0.93)
+  legend = r.TLegend(0.6, 0.93 - 0.06*len(compareSources), 0.9, 0.93)
   legend.SetBorderSize(0)
   legend.SetTextFont(42)
   legend.SetFillColor(0)
-  legend.SetTextSize(0.03)
+  legend.SetTextSize(0.03512593)
   legend.SetFillStyle(0)
  
   canvas.cd(1)
-  hbase = TH1D("hbase","",1,Xmin,Xmax)
+  hbase = r.TH1D("hbase","",1,Xmin,Xmax)
   hbase.GetYaxis().SetRangeUser(Ymin,Ymax)
   hbase.Draw("hist")
   if normalized:
@@ -463,7 +462,7 @@ def drawComparisonPlot(taskSetup, compareSources, outputFile):
   for element in range(0,len(compareSources)):
     compareSource = str(element + 1)
     fileName  = compareSources[compareSource]["filePath"]
-    inputFile = TFile(fileName)
+    inputFile = r.TFile(fileName)
     if inputFile.IsZombie() or not inputFile.GetNkeys():
       print ("Can not open file: " + fileName)
       continue
@@ -475,12 +474,12 @@ def drawComparisonPlot(taskSetup, compareSources, outputFile):
       for histPath in compareSources[compareSource]["histPath"][1:]:
         histTmp.Add(inputFile.Get(histPath))
     
-    histTmp.Rebin(rebinFactor)
+    if rebinFactor!=1: histTmp.Rebin(rebinFactor)
     
     if normalized:
       histTmp.Sumw2()
       histTmp.Scale(1/histTmp.Integral()) 
-    histTmp.SetDirectory(0)
+    if hasattr(histTmp, 'SetDirectory'): histTmp.SetDirectory(0)
     
     oneDHistSetting(histTmp)
     histTmp.SetTitle("")
@@ -490,8 +489,8 @@ def drawComparisonPlot(taskSetup, compareSources, outputFile):
     histTmp.SetLineColor(compareSources[compareSource]["color"])
     histTmp.SetLineWidth(2)
     histTmp.SetLineStyle(1)
-    histTmp.SetAxisRange(Ymin,Ymax,"y")
-    histTmp.SetAxisRange(Xmin,Xmax,"x")
+    #histTmp.SetAxisRange(Ymin,Ymax,"y")
+    #histTmp.SetAxisRange(Xmin,Xmax,"x")
     
     drawOption = compareSources[compareSource]["drawOption"]
     legendDrawOption = "lep"
